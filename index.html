@@ -114,10 +114,12 @@
     }
     .cards {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 24px;
     }
     .card {
+      display: flex;
+      flex-direction: column;
       background: rgba(255,255,255,.08);
       border: 1px solid rgba(255,255,255,.13);
       border-radius: 28px;
@@ -126,6 +128,7 @@
       backdrop-filter: blur(18px);
       transition: .3s ease;
       position: relative;
+      min-height: 650px;
     }
     .card:hover { transform: translateY(-8px); border-color: rgba(126,240,255,.45); }
     .card.featured { border-color: rgba(255,207,74,.55); }
@@ -135,7 +138,15 @@
       object-fit: cover;
       display: block;
     }
-    .card-body { padding: 24px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-body p {
+      min-height: 54px;
+    }
     .rank {
       font-size: 30px;
       font-weight: 950;
@@ -148,7 +159,13 @@
       margin: 14px 0 18px;
     }
     .price small { font-size: 17px; color: rgba(255,255,255,.65); }
-    ul { list-style: none; margin-bottom: 22px; color: rgba(255,255,255,.75); line-height: 1.9; }
+    ul {
+      list-style: none;
+      margin-bottom: 22px;
+      color: rgba(255,255,255,.75);
+      line-height: 1.9;
+      flex: 1;
+    }
     li::before { content: "✦"; color: #5be9ff; margin-right: 8px; }
     .buy {
       width: 100%;
@@ -165,6 +182,7 @@
     .prince .buy { background: linear-gradient(135deg, #7ff2ff, #1ab5ff); }
     .noob .buy { background: linear-gradient(135deg, #fff, #b59cff); }
     .buy-link {
+      margin-top: auto;
       display: block;
       width: 100%;
       border-radius: 16px;
@@ -176,11 +194,26 @@
       text-align: center;
       text-decoration: none;
       transition: .25s ease;
+      background-size: 220% 220%;
+      animation: buttonFlow 3s ease infinite;
     }
-    .buy-link:hover { transform: translateY(-2px); }
-    .king-link { background: linear-gradient(135deg, #ffd65c, #ff8b26); }
-    .prince-link { background: linear-gradient(135deg, #7ff2ff, #1ab5ff); }
-    .noob-link { background: linear-gradient(135deg, #fff, #b59cff); }
+    @keyframes buttonFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .buy-link:hover {
+      transform: translateY(-4px) scale(1.03);
+      filter: brightness(1.15);
+    }
+    .king-link { background: linear-gradient(135deg, #FFAA00, #ffd65c, #FFAA00); color:#111; }
+    .king-link:hover { box-shadow: 0 0 18px #FFAA00, 0 0 36px rgba(255,170,0,.55); }
+    .prince-link { background: linear-gradient(135deg, #55FFFF, #ffffff, #55FFFF); color:#111; }
+    .prince-link:hover { box-shadow: 0 0 18px #55FFFF, 0 0 36px rgba(85,255,255,.55); }
+    .noob-link { background: linear-gradient(135deg, #555555, #888888, #555555); color:#fff; }
+    .noob-link:hover { box-shadow: 0 0 18px #555555, 0 0 36px rgba(85,85,85,.7); }
+    .imperator-link { background: linear-gradient(135deg, #AA0000, #ff3333, #AA0000); color:#fff; }
+    .imperator-link:hover { box-shadow: 0 0 18px #AA0000, 0 0 40px rgba(170,0,0,.7); }
     .how {
       margin-top: 34px;
       padding: 28px;
@@ -230,6 +263,7 @@
     }
     .close { margin-top: 12px; width: 100%; background: transparent; color: rgba(255,255,255,.7); border: 0; cursor: pointer; padding: 10px; }
     @media (max-width: 920px) {
+      .card { min-height: auto; }
       header { margin-bottom: 45px; }
       nav { display: none; }
       .cards, .how { grid-template-columns: 1fr; }
@@ -244,25 +278,42 @@
       <nav>
         <a href="#donate">Донат</a>
         <a href="#how">Как купить</a>
+        <a href="#rules">Правила</a>
         <a href="#contacts">Контакты</a>
       </nav>
     </header>
 
     <section class="hero-content">
-      <div class="badge">🔥 Быстрая покупка привилегий</div>
+      
       <h1>Добро пожаловать на <span>KudusSMP</span></h1>
       <p class="subtitle">Выбери ранг, введи ник и получи донат после оплаты. IP сервера: play.KudusSMP.su • Купи донат и играй с преимуществами.</p>
       <div class="cta-row">
         <a href="#donate"><button class="btn">Выбрать донат</button></a>
-        <button class="btn secondary" onclick="alert('Вставь сюда ссылку на Discord или VK сервера')">Наш Discord</button>
+        <a href="https://www.donationalerts.com/r/kudussmp" target="_blank"><button class="btn">Купить ресурсы</button></a>
+        <a href="https://discord.gg/ta6bNw3kNQ" target="_blank"><button class="btn secondary">Наш Discord</button></a>
       </div>
     </section>
 
     <section class="cards" id="donate">
+      <article class="card featured">
+        <img src="king.png" alt="Imperator донат" />
+        <div class="card-body">
+          <div class="rank" style="color:#AA0000; text-shadow:0 0 10px #AA0000;">IMPERATOR</div>
+          <p>Самый топовый донат с максимальными возможностями.</p>
+          <div class="price">499₽ <small>/ навсегда</small></div>
+          <ul>
+            <li>Префикс Imperator</li>
+            <li>Кит King раз в 5 дней</li>
+            <li>Кит Imperator раз в неделю</li>
+            <li>Крутые команды</li>
+          </ul>
+          <a class="buy-link imperator-link" href="https://www.donationalerts.com/r/kudussmp" target="_blank">Купить Imperator</a>
+        </div>
+      </article>
       <article class="card king featured">
         <img src="king.png" alt="King донат" />
         <div class="card-body">
-          <div class="rank">King</div>
+          <div class="rank" style="color:#FFAA00; text-shadow:0 0 10px #FFAA00;">KING</div>
           <p>Максимальная привилегия для настоящего короля сервера.</p>
           <div class="price">199₽ <small>/ навсегда</small></div>
           <ul>
@@ -277,7 +328,7 @@
       <article class="card prince">
         <img src="prince.png" alt="Prince донат" />
         <div class="card-body">
-          <div class="rank">Prince</div>
+          <div class="rank" style="color:#55FFFF; text-shadow:0 0 10px #55FFFF;">PRINCE</div>
           <p>Сильный ранг для комфортной игры и быстрого старта.</p>
           <div class="price">99₽ <small>/ навсегда</small></div>
           <ul>
@@ -292,7 +343,7 @@
       <article class="card noob">
         <img src="noob.png" alt="Noob донат" />
         <div class="card-body">
-          <div class="rank">Noob</div>
+          <div class="rank" style="color:#555555; text-shadow:0 0 8px #000000; font-weight:900; letter-spacing:1px;">NOOB</div>
           <p>Недорогой донат для новичков, которые хотят выделиться.</p>
           <div class="price">49₽ <small>/ навсегда</small></div>
           <ul>
@@ -303,6 +354,48 @@
           <a class="buy-link noob-link" href="https://www.donationalerts.com/r/kudussmp" target="_blank" rel="noopener">Купить Noob</a>
         </div>
       </article>
+    </section>
+
+    <section id="rules" style="margin-top:40px;padding:30px;border-radius:20px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);">
+      <h2 style="margin-bottom:20px">📜 Правила сервера</h2>
+      <pre style="white-space:pre-wrap;font-family:inherit;color:rgba(255,255,255,.8);line-height:1.6;">
+СВОД ПРАВИЛ:
+   1. Основные правила:
+1.1 Все обязаны соблюдать правила;
+1.2 Незнание правил, не освобождает от бана;
+1.3 Главная Администрация, вправе наказать Вас по причине, не указанной в настоящих правилах;
+1.4 Главная Администрация может задержать Вайп, перенести Вайп на любое время;
+1.5 Только Главная Администрация имеет право корректировать данный свод правил без уведомления игрока;
+1.6 Оскорбление, провоцирование команды проекта запрещено.
+1.7 Любой Администратор вправе, вызвать игрока на проверку, без объяснений
+1.8 Администрация не может общаться с игроками без веской причины
+   2. Правила обычного и голосового чата:
+2.1 Запрещена нецензурная лексика (маты, скрытые маты);
+2.2 Запрещено оскорбления, унижения игроков;
+2.3 Запрещен Капс/Спам/Флуд;
+2.4 Оскорбление, унижение над родней и близкий игроков, является поводом для бана;
+2.5 Запрещается розжиг межнациональной розни, подстрекательство на конфликт этой темы, расизм;
+2.6 Запрещено вызывать игроков на проверку читов;
+2.7 Запрещено покупать игровые ценности за реальную валюту
+   3. Игровые правила:
+3.1 Если Вы пожаловались на игрока, то Вы обязаны показать полную видеозапись и написать:
+1) Ник нарушителя
+2) Номер правила, которое нарушил игрок
+3) Свой ник
+3.1.1 Если Вы дали ложные показания, это может быть поводом для бана(невсегда);
+3.2 Нельзя пользоваться читами, кликерами, автоматизациями;
+3.2.1 Каждые чит, может быть разрешен, ТОЛЬКО для проверки Античита, с согласия 2 Главных Администраторов и под их присмотром.
+3.2.2 Каждая запрещенная модификация может быть разрешена определенной группе людей;
+3.3 Запрещено как-либо помогать, укрывать нарушителя или способствовать в его неправомерных действиях;
+3.4 Запрещено вызывание неполадок в работе сервера или попытки обрушить сервер, путем специально вызванных лагов или подобного;
+3.5 При спорных ситуациях решает все Главная Администрация;
+3.6 Запрещено использование/скрытие багов сервера;
+3.7 Запрещено быть в клане больше чем 4 человека, в команде нельзя быть больше чем 5 человек;
+3.8 Запрещено иметь 2 и более аккаунтов, одновременно играющих на  сервере
+   4. Аккаунт:
+4.1 Запрещено иметь никнейм похожий на никнейм Администрации
+4.2 Запрещено иметь никнейм  похожий на название других проектов/чит-клиентов
+      </pre>
     </section>
 
     <section class="how" id="how">
