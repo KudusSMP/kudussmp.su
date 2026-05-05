@@ -1,53 +1,72 @@
 import crypto from "crypto";
 
+const PRODUCTS = {
+  NOOB: { sum: 49, title: "NOOB" },
+  PRINCE: { sum: 99, title: "PRINCE" },
+  KING: { sum: 199, title: "KING" },
+  IMPERATOR: { sum: 499, title: "IMPERATOR" },
+};
+
 export default async function handler(req, res) {
-  const { product } = req.query;
-
-  const prices = {
-    NOOB: 49,
-    PRINCE: 99,
-    KING: 199,
-    IMPERATOR: 499,
-  };
-
-  if (!prices[product]) {
-    return res.status(400).send("Неверный товар");
-  }
-
-  const shopId = process.env.LAVA_SHOP_ID;
-  const secretKey = process.env.LAVA_SECRET_KEY;
-
-  const orderId = Date.now().toString();
-  const sum = prices[product].toFixed(2);
-
-  const signString = `${shopId}:${sum}:${orderId}:${secretKey}`;
-  const signature = crypto.createHash("md5").update(signString).digest("hex");
-
   try {
+    const product = String(req.query.product || "").toUpperCase();
+    const item = PRODUCTS[product];
+
+    if (!item) {
+      return res.status(400).send("Неверная привилегия");
+    }
+
+    const shopId = process.env.LAVA_SHOP_ID;
+    const secretKey = process.env.LAVA_SECRET_KEY;
+
+    if (!shopId || !secretKey) {
+      return res.status(500).send("Не настроены ключи Lava");
+    }
+
+    const data = {
+      sum: item.sum,
+      orderId: `${product}-${Date.now()}`,
+      shopId: shopId,
+      successUrl: "https://www.kudussmp.su",
+      failUrl: "https://www.kudussmp.su",
+      expire: 300,
+      comment: `KudusSMP ${item.title}`,
+      customFields: JSON.stringify({
+        product: product,
+        server: "KudusSMP",
+      }),
+    };
+
+    const body = JSON.stringify(data);
+
+    const signature = crypto
+      .createHmac("sha256", secretKey)
+      .update(body)
+      .digest("hex");
+
     const response = await fetch("https://api.lava.ru/business/invoice/create", {
       method: "POST",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+        Signature: signature,
       },
-      body: JSON.stringify({
-        shopId,
-        sum,
-        orderId,
-        signature,
-        comment: product,
-        successUrl: "https://www.kudussmp.su/success.html",
-        failUrl: "https://www.kudussmp.su/fail.html",
-      }),
+      body: body,
     });
 
-    const data = await response.json();
+    const result = await response.json();
 
-    if (data?.data?.url) {
-      return res.redirect(data.data.url);
-    } else {
-      return res.status(500).json(data);
+    const payUrl =
+      result?.data?.url ||
+      result?.data?.paymentUrl ||
+      result?.data?.payUrl;
+
+    if (!payUrl) {
+      return res.status(500).json(result);
     }
-  } catch (err) {
-    return res.status(500).send("Ошибка сервера");
+
+    return res.redirect(payUrl);
+  } catch (error) {
+    return res.status(500).send(error.message);
   }
 }
