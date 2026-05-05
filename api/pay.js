@@ -10,10 +10,15 @@ const PRODUCTS = {
 export default async function handler(req, res) {
   try {
     const product = String(req.query.product || "").toUpperCase();
+    const nick = String(req.query.nick || "").trim();
     const item = PRODUCTS[product];
 
     if (!item) {
       return res.status(400).send("Неверная привилегия");
+    }
+
+    if (!/^[a-zA-Z0-9_]{3,16}$/.test(nick)) {
+      return res.status(400).send("Неверный Minecraft ник");
     }
 
     const shopId = process.env.LAVA_SHOP_ID;
@@ -25,14 +30,16 @@ export default async function handler(req, res) {
 
     const data = {
       sum: item.sum,
-      orderId: `${product}-${Date.now()}`,
+      orderId: `${product}-${nick}-${Date.now()}`,
       shopId: shopId,
+      hookUrl: "https://www.kudussmp.su/api/webhook",
       successUrl: "https://www.kudussmp.su",
       failUrl: "https://www.kudussmp.su",
       expire: 300,
-      comment: `KudusSMP ${item.title}`,
+      comment: `KudusSMP ${item.title} для ${nick}`,
       customFields: JSON.stringify({
         product: product,
+        nick: nick,
         server: "KudusSMP",
       }),
     };
