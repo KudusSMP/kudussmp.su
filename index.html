@@ -64,7 +64,7 @@
       <div class="logo"><div class="cube"></div> KudusSMP</div>
       <nav>
         <a href="#donate">Привилегии</a>
-                <a href="#rules">Правила</a>
+        <a href="#rules">Правила</a>
         <a href="#contacts">Контакты</a>
       </nav>
     </header>
@@ -93,6 +93,7 @@
           <button class="buy-link imperator-link" onclick="openBuyModal('IMPERATOR', '499₽')">Купить Imperator</button>
         </div>
       </article>
+
       <article class="card king">
         <img src="king.png" alt="King привилегия" />
         <div class="card-body">
@@ -107,6 +108,7 @@
           <button class="buy-link king-link" onclick="openBuyModal('KING', '199₽')">Купить King</button>
         </div>
       </article>
+
       <article class="card prince">
         <img src="prince.png" alt="Prince привилегия" />
         <div class="card-body">
@@ -121,6 +123,7 @@
           <button class="buy-link prince-link" onclick="openBuyModal('PRINCE', '99₽')">Купить Prince</button>
         </div>
       </article>
+
       <article class="card noob">
         <img src="noob.png" alt="Noob привилегия" />
         <div class="card-body">
@@ -186,9 +189,7 @@
         <p><b>IP сервера:</b> play.KudusSMP.su</p>
         <p><b>Поддержка:</b> пишите в Discord сервер</p>
         <p><b>Discord (поддержка):</b> <a href="https://discord.gg/ta6bNw3kNQ" target="_blank">discord.gg/ta6bNw3kNQ</a></p>
-        
       </div>
-
       <div class="legal-block">
         <h2>🚚 Условия оказания услуг</h2>
         <p>Все товары на сайте являются виртуальными игровыми услугами для сервера KudusSMP.</p>
@@ -196,7 +197,6 @@
         <p>Выдача привилегии происходит после подтверждения оплаты и проверки ника игрока.</p>
         <p>Срок выдачи: обычно до 24 часов после оплаты.</p>
       </div>
-
       <div class="legal-block">
         <h2>↩️ Возврат и отмена платежа</h2>
         <p>Пользователь может подать заявку на возврат денежных средств в течение 48 часов с момента оплаты, если привилегия не была выдана или выдана с ошибкой по вине проекта.</p>
@@ -205,19 +205,16 @@
         <p>Заявка на возврат рассматривается в течение 24 часов с момента обращения в поддержку.</p>
         <p>В случае одобрения возврат осуществляется в течение 72 часов с момента принятия решения.</p>
       </div>
-
       <div class="legal-block">
         <h2>📄 Оферта</h2>
         <p>Покупая привилегию, пользователь соглашается с условиями сервера, правилами проекта и условиями оказания виртуальных услуг.</p>
         <p>Привилегия не является покупкой официальных товаров Minecraft, Mojang или Microsoft.</p>
       </div>
-
       <div class="legal-block">
         <h2>🔒 Политика персональных данных</h2>
         <p>Сайт может обрабатывать ник игрока, контактные данные и информацию об оплате только для выдачи услуги и связи с пользователем.</p>
         <p>Данные не передаются третьим лицам, кроме платёжных сервисов, необходимых для обработки платежа.</p>
       </div>
-
       <div class="legal-block">
         <h2>⚖️ Правообладатели</h2>
         <p>KudusSMP не является официальным продуктом Minecraft, Mojang или Microsoft.</p>
@@ -228,6 +225,7 @@
 
   </main>
 
+  <!-- Модальное окно -->
   <div class="modal-overlay" id="buyModal">
     <div class="buy-modal">
       <h2 id="modalTitle">Покупка привилегии</h2>
@@ -256,13 +254,31 @@
       document.getElementById('buyModal').classList.remove('active');
     }
 
-    function goToPayment() {
+    async function goToPayment() {
       const nick = document.getElementById('minecraftNick').value.trim();
       if (!nick) {
         alert('Введите игровой ник');
         return;
       }
-      window.location.href = '/api/pay?product=' + encodeURIComponent(selectedProduct) + '&nick=' + encodeURIComponent(nick);
+
+      try {
+        const response = await fetch('/api/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product: selectedProduct, nick })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          alert('Оплата обработана: ' + result.result);
+          closeBuyModal();
+        } else {
+          alert('Ошибка: ' + (result.error || 'неизвестная ошибка'));
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Ошибка соединения с сервером');
+      }
     }
 
     document.getElementById('buyModal').addEventListener('click', function(event) {
