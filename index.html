@@ -42,6 +42,18 @@
     .legal-block { padding:24px; border-radius:20px; background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.8); line-height:1.6; }
     .legal-block h2 { color:#fff; margin-bottom:12px; }
     .legal-block a { color:#55FFFF; }
+    .modal-overlay { position:fixed; inset:0; z-index:99; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(0,0,0,.72); backdrop-filter:blur(10px); }
+    .modal-overlay.active { display:flex; }
+    .buy-modal { width:min(430px,100%); border-radius:28px; padding:28px; background:linear-gradient(145deg, rgba(24,24,24,.96), rgba(8,8,8,.96)); border:1px solid rgba(255,255,255,.14); box-shadow:0 30px 100px rgba(0,0,0,.65); }
+    .buy-modal h2 { font-size:30px; margin-bottom:10px; }
+    .buy-modal p { color:rgba(255,255,255,.7); line-height:1.5; margin-bottom:18px; }
+    .buy-modal input { width:100%; padding:16px 18px; border-radius:16px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.08); color:#fff; font-size:17px; outline:none; margin-bottom:14px; }
+    .buy-modal input:focus { border-color:#55FFFF; box-shadow:0 0 20px rgba(85,255,255,.18); }
+    .modal-actions { display:flex; gap:12px; }
+    .modal-buy, .modal-close { flex:1; border:0; border-radius:16px; padding:15px; font-weight:950; cursor:pointer; transition:.25s ease; }
+    .modal-buy { color:#111; background:linear-gradient(135deg,#55FFFF,#FFAA00); }
+    .modal-close { color:#fff; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); }
+    .modal-buy:hover, .modal-close:hover { transform:translateY(-2px); }
     @media (max-width: 920px) { .cards, .legal { grid-template-columns:1fr; } nav { display:none; } }
     @keyframes buttonFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
   </style>
@@ -78,7 +90,7 @@
             <li>Кит Imperator раз в неделю</li>
             <li>Крутые команды</li>
           </ul>
-          <a class="buy-link imperator-link" href="/api/pay?product=IMPERATOR" target="_blank">Купить Imperator</a>
+          <button class="buy-link imperator-link" onclick="openBuyModal('IMPERATOR', '499₽')">Купить Imperator</button>
         </div>
       </article>
       <article class="card king">
@@ -92,7 +104,7 @@
             <li>Уникальный префикс King</li>
             <li>Кит раз в 5 дней</li>
           </ul>
-          <a class="buy-link king-link" href="/api/pay?product=KING" target="_blank">Купить King</a>
+          <button class="buy-link king-link" onclick="openBuyModal('KING', '199₽')">Купить King</button>
         </div>
       </article>
       <article class="card prince">
@@ -106,7 +118,7 @@
             <li>Полезные команды</li>
             <li>Кит раз в 3 дня</li>
           </ul>
-          <a class="buy-link prince-link" href="/api/pay?product=PRINCE" target="_blank">Купить Prince</a>
+          <button class="buy-link prince-link" onclick="openBuyModal('PRINCE', '99₽')">Купить Prince</button>
         </div>
       </article>
       <article class="card noob">
@@ -120,7 +132,7 @@
             <li>Кит раз в 1.5 дня</li>
             <li>Базовые бонусы</li>
           </ul>
-          <a class="buy-link noob-link" href="/api/pay?product=NOOB" target="_blank">Купить Noob</a>
+          <button class="buy-link noob-link" onclick="openBuyModal('NOOB', '49₽')">Купить Noob</button>
         </div>
       </article>
     </section>
@@ -215,6 +227,48 @@
     </section>
 
   </main>
+
+  <div class="modal-overlay" id="buyModal">
+    <div class="buy-modal">
+      <h2 id="modalTitle">Покупка привилегии</h2>
+      <p id="modalText">Введите игровой ник, чтобы мы знали, кому выдать привилегию.</p>
+      <input id="minecraftNick" type="text" placeholder="Ваш Minecraft ник" maxlength="20" />
+      <div class="modal-actions">
+        <button class="modal-close" onclick="closeBuyModal()">Отмена</button>
+        <button class="modal-buy" onclick="goToPayment()">Перейти к оплате</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedProduct = '';
+
+    function openBuyModal(product, price) {
+      selectedProduct = product;
+      document.getElementById('modalTitle').textContent = 'Купить ' + product;
+      document.getElementById('modalText').textContent = 'Стоимость: ' + price + '. Введите игровой ник для выдачи привилегии.';
+      document.getElementById('minecraftNick').value = '';
+      document.getElementById('buyModal').classList.add('active');
+      setTimeout(() => document.getElementById('minecraftNick').focus(), 100);
+    }
+
+    function closeBuyModal() {
+      document.getElementById('buyModal').classList.remove('active');
+    }
+
+    function goToPayment() {
+      const nick = document.getElementById('minecraftNick').value.trim();
+      if (!nick) {
+        alert('Введите игровой ник');
+        return;
+      }
+      window.location.href = '/api/pay?product=' + encodeURIComponent(selectedProduct) + '&nick=' + encodeURIComponent(nick);
+    }
+
+    document.getElementById('buyModal').addEventListener('click', function(event) {
+      if (event.target === this) closeBuyModal();
+    });
+  </script>
 
   <footer id="contacts">© 2026 KudusSMP — play.KudusSMP.su</footer>
 </body>
