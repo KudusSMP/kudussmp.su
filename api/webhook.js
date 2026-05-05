@@ -4,7 +4,7 @@ const GROUPS = {
   NOOB: "noob",
   PRINCE: "prince",
   KING: "king",
-  IMPERATOR: "imperator",
+  IMPERATOR: "imperator"
 };
 
 export default async function handler(req, res) {
@@ -14,47 +14,53 @@ export default async function handler(req, res) {
     }
 
     const data = req.body;
+    console.log("WEBHOOK DATA:", data);
 
-    // Проверяем статус оплаты
-    const status = String(data.status || data.invoiceStatus || "").toLowerCase();
+    // проверка статуса
+    const status = String(
+      data.status || data.invoiceStatus || ""
+    ).toLowerCase();
 
     if (!["success", "paid", "completed"].includes(status)) {
-      return res.status(200).send("Payment not completed");
+      return res.status(200).send("Не оплачено");
     }
 
-    // Достаём данные
+    // достаём customFields
     let fields = data.customFields;
 
     if (typeof fields === "string") {
       fields = JSON.parse(fields);
     }
 
-    const product = String(fields?.product || "").toUpperCase();
-    const nick = String(fields?.nick || "").trim();
+    const nick = fields?.nick;
+    const product = fields?.product;
 
-    if (!GROUPS[product] || !nick) {
-      return res.status(400).send("Missing product or nick");
+    if (!nick || !product) {
+      return res.status(400).send("Нет данных");
     }
 
-    // Проверка ника
-    if (!/^[a-zA-Z0-9_]{3,16}$/.test(nick)) {
-      return res.status(400).send("Invalid nickname");
+    const group = GROUPS[product];
+    if (!group) {
+      return res.status(400).send("Нет группы");
     }
 
-    // Подключение к серверу
+    // подключение к серверу
     const rcon = await Rcon.connect({
       host: process.env.RCON_HOST,
       port: Number(process.env.RCON_PORT),
-      password: process.env.RCON_PASSWORD,
+      password: process.env.RCON_PASSWORD
     });
 
-    // Выдача доната
-    await rcon.send(`lp user ${nick} parent set ${GROUPS[product]}`);
+    // команда выдачи
+    await rcon.send(`lp user ${nick} parent add ${group}`);
     await rcon.end();
 
-    return res.status(200).send("Privilege issued");
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send(error.message);
+    console.log(`Выдано: ${nick} -> ${group}`);
+
+    res.status(200).send("OK");
+
+  } catch (err) {
+    console.log("WEBHOOK ERROR:", err);
+    res.status(500).send("Ошибка");
   }
 }
