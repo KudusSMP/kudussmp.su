@@ -2,47 +2,56 @@ import crypto from "crypto";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
 
   const { product, nick } = req.body;
 
   if (!product || !nick) {
-    return res.status(422).json({ error: "Нужно указать product и nick" });
+    return res.status(422).json({ error: "Неверные данные" });
   }
 
-  // Привязка цен к продуктам
-  const products = {
-    NOOB: 49,
-    PRINCE: 99,
-    KING: 199,
-    IMPERATOR: 499,
-  };
+  try {
+    // Получаем секретные ключи из переменных окружения Vercel
+    const LAVA_SHOP_ID = process.env.LAVA_SHOP_ID;
+    const LAVA_SECRET_KEY = process.env.LAVA_SECRET_KEY;
 
-  const amount = products[product];
-  if (!amount) {
-    return res.status(422).json({ error: "Продукт не найден" });
+    if (!LAVA_SHOP_ID || !LAVA_SECRET_KEY) {
+      return res.status(500).json({ error: "Секретные ключи не настроены" });
+    }
+
+    // Формируем параметры для Lava
+    const params = {
+      shopId: LAVA_SHOP_ID,
+      amount: productPrice(product), // функция ниже
+      currency: "RUB",
+      productName: product,
+      customFields: nick,
+    };
+
+    // Формируем подпись
+    const signatureString = `${params.shopId}:${params.amount}:${params.currency}:${params.productName}:${LAVA_SECRET_KEY}`;
+    const signature = crypto.createHash("sha256").update(signatureString).digest("hex");
+
+    // Возвращаем клиенту ссылку для оплаты
+    res.status(200).json({
+      success: true,
+      payUrl: `https://pay.lava.ru/checkout?shopId=${params.shopId}&amount=${params.amount}&currency=${params.currency}&productName=${encodeURIComponent(params.productName)}&customFields=${encodeURIComponent(nick)}&signature=${signature}`
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка сервера" });
   }
+}
 
-  const orderId = `${product}_${nick}_${Date.now()}`; // уникальный ID заказа
-
-  // Генерация подписи Lava
-  const signatureString = `${process.env.LAVA_SHOP_ID};${amount};RUB;${orderId};${process.env.LAVA_SECRET_KEY}`;
-  const signature = crypto.createHash("sha256").update(signatureString).digest("hex");
-
-  // Формируем объект для Lava
-  const payload = {
-    shopId: process.env.LAVA_SHOP_ID,
-    amount: amount,
-    currency: "RUB",
-    orderId: orderId,
-    productName: product,
-    nick: nick,
-    signature: signature,
-    successUrl: `${process.env.SITE_URL}?success=1`,
-    failUrl: `${process.env.SITE_URL}?fail=1`,
-  };
-
-  // Возвращаем данные клиенту (чтобы он перенаправился на Lava)
-  res.status(200).json(payload);
+// Функция возвращает сумму по выбранному продукту
+function productPrice(product) {
+  switch(product.toUpperCase()) {
+    case "IMPERATOR": return 499;
+    case "KING": return 199;
+    case "PRINCE": return 99;
+    case "NOOB": return 49;
+    default: return 0;
+  }
 }
