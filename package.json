@@ -1,1 +1,6 @@
-
+{
+  "name": "kudussmp-site",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {}
+}
