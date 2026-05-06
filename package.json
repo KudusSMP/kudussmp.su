@@ -2,5 +2,7 @@
   "name": "kudussmp-site",
   "version": "1.0.0",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "rcon-client": "^4.2.5"
+  }
 }
