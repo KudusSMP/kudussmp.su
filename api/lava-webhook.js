@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 if (req.method === 'GET') {
 
   const product = 'NOOB';
-  const nick = 'testerhuy';
+  const nick = 'proverka2';
 
   const commandTemplate = commands[product];
   const command = commandTemplate.replace('{nick}', nick);
