@@ -1,10 +1,10 @@
 import fetch from 'node-fetch';
 
-// Адрес сервера + путь, который слушает WebhookLogger
-const WEBHOOKLOGGER_URL = 'http://d6.aurorix.net:19096';  // IP сервера Aurorix
-const WEBHOOKLOGGER_ENDPOINT = '/webhook';                 // путь webhook плагина
+// URL сервера Aurorix с WebhookLogger
+const WEBHOOKLOGGER_URL = 'http://d6.aurorix.net:19096';
+const WEBHOOKLOGGER_ENDPOINT = '/webhook';
 
-// Список команд LuckPerms для разных рангов
+// Команды LuckPerms
 const commands = {
   IMPERATOR: 'lp user {nick} parent set imperator',
   KING: 'lp user {nick} parent set king',
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     // === Временный тест GET ===
     if (req.method === 'GET') {
       const product = 'NOOB';
-      const nick = 'TestPlayer';
+      const nick = 'proverka2';
       const command = commands[product].replace('{nick}', nick);
 
       const payload = { type: 'command', command };
@@ -36,14 +36,13 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       const body = req.body;
 
-      // Проверка успешного платежа
       const status = String(body.status || '').toLowerCase();
       if (status !== 'success') return res.status(200).send('Payment not successful');
 
       const orderId = body.order_id || body.orderId;
       if (!orderId) return res.status(400).send('Missing order_id');
 
-      // Разбираем order_id (формат: "NOOB-TestPlayer-<timestamp>")
+      // Формат order_id: "NOOB-TestPlayer-<timestamp>"
       const parts = orderId.split('-');
       const product = parts[0];
       const nick = parts[1];
@@ -57,7 +56,6 @@ export default async function handler(req, res) {
 
       const payload = { type: 'command', command };
 
-      // Отправка POST на WebhookLogger
       const response = await fetch(`${WEBHOOKLOGGER_URL}${WEBHOOKLOGGER_ENDPOINT}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
