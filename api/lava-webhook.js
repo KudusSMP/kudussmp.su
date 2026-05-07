@@ -1,43 +1,56 @@
-import { Rcon } from 'rcon-client';
+import express from "express";
+import bodyParser from "body-parser";
+import fetch from "node-fetch";
 
-const RCON_HOST = process.env.RCON_HOST;
-const RCON_PORT = Number(process.env.RCON_PORT);
-const RCON_PASSWORD = process.env.RCON_PASSWORD;
+const app = express();
+app.use(bodyParser.json());
 
+// Словарь команд для ролей
 const commands = {
-  IMPERATOR: 'lp user {nick} parent set imperator',
-  KING: 'lp user {nick} parent set king',
-  PRINCE: 'lp user {nick} parent set prince',
-  NOOB: 'lp user {nick} parent set noob'
+  NOOB: "lp user {nick} parent set noob",
+  PRINCE: "lp user {nick} parent set prince",
+  KING: "lp user {nick} parent set king",
+  IMPERATOR: "lp user {nick} parent set imperator"
 };
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
-
-  const body = req.body;
-
-  if (!body || !body.order_id || !body.status || body.status !== 'success') {
-    return res.status(400).send('Invalid payload');
-  }
-
-  const [product, nick] = body.order_id.split('-');
-
-  if (!commands[product]) return res.status(400).send('Unknown product');
-
+// Вебхук от Lava
+app.post("/api/lava-webhook", async (req, res) => {
   try {
-    const rcon = await Rcon.connect({
-      host: RCON_HOST,
-      port: RCON_PORT,
-      password: RCON_PASSWORD
+    const { order_id, status } = req.body;
+
+    if (status !== "success") {
+      return res.status(400).send("Payment not successful");
+    }
+
+    // Получаем ник и роль из order_id
+    // Формат order_id: ROLE-NICK
+    const [role, nick] = order_id.split("-");
+
+    if (!commands[role]) {
+      return res.status(400).send("Invalid role");
+    }
+
+    // Отправка команды на сервер через WebhookLogger
+    // WebhookLogger ожидает POST JSON:
+    // { "command": "/lp user ...", "executor": "console" }
+    const webhookUrl = "http://d6.aurorix.net:19096/webhook"; // Плагин WebhookLogger
+
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        command: commands[role].replace("{nick}", nick),
+        executor: "console"
+      })
     });
 
-    const cmd = commands[product].replace('{nick}', nick);
-    await rcon.send(cmd);
-    await rcon.end();
-
-    return res.status(200).send('OK');
+    return res.status(200).send("Role granted successfully");
   } catch (err) {
-    console.error('RCON error:', err);
-    return res.status(500).send('RCON error');
+    console.error(err);
+    return res.status(500).send("Server error");
   }
-}
+});
+
+app.listen(3000, () => {
+  console.log("Lava Webhook Server running on port 3000");
+});
