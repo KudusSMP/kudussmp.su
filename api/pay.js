@@ -1,8 +1,14 @@
 import crypto from 'crypto';
+import { Rcon } from 'rcon-client';
 
 const SHOP_ID = '43a149e1-a7ed-4b96-973b-43a446237377';
 const SECRET_KEY = process.env.LAVA_SECRET_KEY;
 const SITE_URL = 'https://kudussmp.su';
+
+// RCON конфиг
+const RCON_HOST = process.env.RCON_HOST; // d6.aurorix.net
+const RCON_PORT = Number(process.env.RCON_PORT); // 19096
+const RCON_PASSWORD = process.env.RCON_PASSWORD; // ParolyaNETY1488
 
 const prices = {
   IMPERATOR: 499,
@@ -11,63 +17,35 @@ const prices = {
   NOOB: 49
 };
 
-function makeSignature(jsonString) {
-  return crypto
-    .createHmac('sha256', SECRET_KEY)
-    .update(jsonString)
-    .digest('hex');
-}
+const commands = {
+  IMPERATOR: 'lp user {nick} parent set imperator',
+  KING: 'lp user {nick} parent set king',
+  PRINCE: 'lp user {nick} parent set prince',
+  NOOB: 'lp user {nick} parent set noob'
+};
 
 export default async function handler(req, res) {
   const { product, nick } = req.query;
 
-  if (!product || !nick) {
-    return res.status(400).send('Не указан товар или ник');
+  if (!product || !nick || !prices[product]) {
+    return res.status(400).send('Invalid parameters');
   }
 
   const amount = prices[product];
 
-  if (!amount) {
-    return res.status(400).send('Неизвестный товар');
-  }
-
-  const orderId = `${product}-${nick}-${Date.now()}`;
-
-  const body = {
-    sum: amount,
-    orderId,
+  // создаём данные для Lava (чтобы потом webhook пришёл)
+  const data = {
     shopId: SHOP_ID,
-    hookUrl: `${SITE_URL}/api/lava-webhook`,
-    successUrl: SITE_URL,
-    failUrl: SITE_URL,
-    comment: `KudusSMP: ${product}, ник: ${nick}`,
-    customFields: JSON.stringify({ product, nick })
+    amount,
+    nick,
+    product
   };
 
-  const jsonString = JSON.stringify(body);
-  const signature = makeSignature(jsonString);
-
-  const response = await fetch('https://api.lava.ru/business/invoice/create', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Signature': signature
-    },
-    body: jsonString
+  // Для теста можно вернуть JSON с данными для Lava
+  return res.status(200).json({
+    message: 'API работает',
+    product,
+    nick,
+    amount
   });
-
-  const data = await response.json();
-
-  const paymentUrl =
-    data?.data?.url ||
-    data?.data?.paymentUrl ||
-    data?.data?.link ||
-    data?.url;
-
-  if (!paymentUrl) {
-    return res.status(500).send(JSON.stringify(data, null, 2));
-  }
-
-  return res.redirect(paymentUrl);
 }
