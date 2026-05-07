@@ -1,10 +1,9 @@
-import fetch from 'node-fetch';
+import { Rcon } from 'rcon-client';
 
-// URL сервера Aurorix с WebhookLogger
-const WEBHOOKLOGGER_URL = 'http://d6.aurorix.net:19096';
-const WEBHOOKLOGGER_ENDPOINT = '/webhook';
+const RCON_HOST = process.env.RCON_HOST;
+const RCON_PORT = Number(process.env.RCON_PORT);
+const RCON_PASSWORD = process.env.RCON_PASSWORD;
 
-// Команды LuckPerms
 const commands = {
   IMPERATOR: 'lp user {nick} parent set imperator',
   KING: 'lp user {nick} parent set king',
@@ -13,68 +12,32 @@ const commands = {
 };
 
 export default async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
+
+  const body = req.body;
+
+  if (!body || !body.order_id || !body.status || body.status !== 'success') {
+    return res.status(400).send('Invalid payload');
+  }
+
+  const [product, nick] = body.order_id.split('-');
+
+  if (!commands[product]) return res.status(400).send('Unknown product');
+
   try {
-    // === Временный тест GET ===
-    if (req.method === 'GET') {
-      const product = 'NOOB';
-      const nick = 'proverka2';
-      const command = commands[product].replace('{nick}', nick);
+    const rcon = await Rcon.connect({
+      host: RCON_HOST,
+      port: RCON_PORT,
+      password: RCON_PASSWORD
+    });
 
-      const payload = { type: 'command', command };
+    const cmd = commands[product].replace('{nick}', nick);
+    await rcon.send(cmd);
+    await rcon.end();
 
-      await fetch(`${WEBHOOKLOGGER_URL}${WEBHOOKLOGGER_ENDPOINT}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      console.log(`Тестовая выдача: ${product} игроку ${nick}`);
-      return res.status(200).send('Тестовая выдача выполнена');
-    }
-
-    // === POST от Lava ===
-    if (req.method === 'POST') {
-      const body = req.body;
-
-      const status = String(body.status || '').toLowerCase();
-      if (status !== 'success') return res.status(200).send('Payment not successful');
-
-      const orderId = body.order_id || body.orderId;
-      if (!orderId) return res.status(400).send('Missing order_id');
-
-      // Формат order_id: "NOOB-TestPlayer-<timestamp>"
-      const parts = orderId.split('-');
-      const product = parts[0];
-      const nick = parts[1];
-
-      if (!product || !nick) return res.status(400).send('Invalid order_id');
-
-      const commandTemplate = commands[product];
-      if (!commandTemplate) return res.status(400).send('Unknown product');
-
-      const command = commandTemplate.replace('{nick}', nick);
-
-      const payload = { type: 'command', command };
-
-      const response = await fetch(`${WEBHOOKLOGGER_URL}${WEBHOOKLOGGER_ENDPOINT}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const text = await response.text();
-        console.error('WebhookLogger error:', text);
-        return res.status(500).send('Failed to send command to server');
-      }
-
-      console.log(`Выдан донат: ${product} игроку ${nick}`);
-      return res.status(200).send('ok');
-    }
-
-    return res.status(405).send('Method not allowed');
-  } catch (error) {
-    console.error('Webhook error:', error);
-    return res.status(500).send(error.message);
+    return res.status(200).send('OK');
+  } catch (err) {
+    console.error('RCON error:', err);
+    return res.status(500).send('RCON error');
   }
 }
