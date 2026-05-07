@@ -269,19 +269,17 @@ function closeBuyModal() {
 
 function goToPayment() {
   const nick = document.getElementById('minecraftNick').value.trim();
-  if (!nick) { alert('Введите игровой ник'); return; }
 
-  let amount = 0;
-  switch(selectedProduct) {
-    case 'IMPERATOR': amount = 499; break;
-    case 'KING': amount = 199; break;
-    case 'PRINCE': amount = 99; break;
-    case 'NOOB': amount = 49; break;
+  if (!nick) {
+    alert('Введите игровой ник');
+    return;
   }
 
-  // Lava ссылка с вашим id проекта
-  const lavaLink = 'https://pay.lava.ru/pay/43a149e1-a7ed-4b96-973b-43a446237377?amount=' + amount + '&comment=' + encodeURIComponent(selectedProduct + ' для ' + nick);
-  window.open(lavaLink, '_blank');
+  window.location.href =
+    '/api/pay?product=' +
+    encodeURIComponent(selectedProduct) +
+    '&nick=' +
+    encodeURIComponent(nick);
 }
 
 document.getElementById('buyModal').addEventListener('click', function(event) {
