@@ -2,7 +2,7 @@
 import { Rcon } from "rcon-client";
 import bodyParser from "body-parser";
 
-export const config = { runtime: "nodejs18.x" };
+export const config = { runtime: "nodejs" };
 
 export default async function handler(req, res) {
   try {
