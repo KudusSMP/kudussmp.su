@@ -13,9 +13,25 @@ const commands = {
 
 export default async function handler(req, res) {
   try {
-    if (req.method !== 'POST') {
-      return res.status(405).send('Method not allowed');
-    }
+if (req.method === 'GET') {
+
+  const product = 'NOOB';
+  const nick = 'proverka2';
+
+  const commandTemplate = commands[product];
+  const command = commandTemplate.replace('{nick}', nick);
+
+  const rcon = await Rcon.connect({
+    host: RCON_HOST,
+    port: RCON_PORT,
+    password: RCON_PASSWORD
+  });
+
+  await rcon.send(command);
+  await rcon.end();
+
+  return res.status(200).send('Тестовая выдача выполнена');
+}
 
     const body = req.body;
 
