@@ -1,7 +1,8 @@
-import fetch from 'node-fetch';
+import { Rcon } from 'rcon-client';
 
-const WEBHOOKLOGGER_URL = 'http://d6.aurorix.net:19096'; // IP/порт сервера Aurorix
-const WEBHOOKLOGGER_ENDPOINT = '/webhook'; // путь, который слушает WebhookLogger
+const RCON_HOST = process.env.RCON_HOST;
+const RCON_PORT = Number(process.env.RCON_PORT);
+const RCON_PASSWORD = process.env.RCON_PASSWORD;
 
 const commands = {
   IMPERATOR: 'lp user {nick} parent set imperator',
