@@ -656,13 +656,35 @@
       document.getElementById('buyModal').classList.remove('active');
     }
 
-    function goToPayment() {
-      const nick = document.getElementById('minecraftNick').value.trim();
+function goToPayment() {
+  const nick = document.getElementById('minecraftNick').value.trim();
 
-      if (!nick) {
-        alert('Введите игровой ник');
-        return;
-      }
+  if (!nick) {
+    alert('Введите игровой ник');
+    return;
+  }
+
+  const prices = {
+    IMPERATOR: 499,
+    KING: 199,
+    PRINCE: 99,
+    NOOB: 49
+  };
+
+  const amount = prices[selectedProduct];
+
+  // ТВОЙ SHOP ID ИЗ LAVA
+  const shopId = 'ТВОЙ_SHOP_ID';
+
+  // Ссылка на оплату Lava
+  const lavaUrl =
+    'https://lava.ru/pay/' +
+    '?shop_id=' + encodeURIComponent(shopId) +
+    '&amount=' + encodeURIComponent(amount) +
+    '&comment=' + encodeURIComponent(selectedProduct + ' | ' + nick);
+
+  window.location.href = lavaUrl;
+}
 
       // Пока оставляем базовую ссылку на будущий обработчик оплаты.
       // Позже сюда подключим Lava или другой способ оплаты.
