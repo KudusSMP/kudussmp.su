@@ -73,6 +73,25 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 @keyframes buttonFlow { 0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%} }
 @media(max-width:1200px){.cards{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:920px){.cards,.legal{grid-template-columns:1fr;} nav{display:none;} h1{letter-spacing:-2px;}}
+
+.social-link {
+  display:block;
+  margin:10px 0;
+  padding:14px;
+  background:rgba(85,255,255,.15);
+  color:#fff;
+  text-decoration:none;
+  border-radius:14px;
+  text-align:center;
+  font-weight:900;
+  border:1px solid rgba(255,255,255,.16);
+  transition:.25s ease;
+}
+.social-link:hover {
+  background:rgba(85,255,255,.3);
+  transform:translateY(-2px);
+}
+
 </style>
 </head>
 <body>
@@ -86,7 +105,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <section class="hero-content">
 <h1>Добро пожаловать на <span>KudusSMP</span></h1>
 <p class="subtitle">Выбери ранг, введи ник и получи привилегию после оплаты. IP сервера: play.KudusSMP.su • Купи привилегию и играй с преимуществами.</p>
-<div class="cta-row"><a href="https://discord.gg/ta6bNw3kNQ" target="_blank"><button class="btn secondary">Наш Discord</button></a></div>
+<div class="cta-row"><button class="btn secondary" onclick="openSocialModal()">Наши соцсети</button></div>
 </section>
 
 <section class="cards" id="donate">
@@ -238,6 +257,20 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   </div>
 </div>
 
+
+<!-- Модальное окно соцсетей -->
+<div class="modal-overlay" id="socialModal">
+  <div class="buy-modal">
+    <h2>Наши соцсети</h2>
+    <p>Выбери, куда перейти:</p>
+    <a class="social-link" href="https://discord.gg/ta6bNw3kNQ" target="_blank">Наш Discord</a>
+    <a class="social-link" href="https://t.me/kudusSMP" target="_blank">Наш Telegram</a>
+    <div class="modal-actions">
+      <button class="modal-close" onclick="closeSocialModal()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
 <footer>© 2026 KudusSMP — play.KudusSMP.su</footer>
 
 <script>
@@ -311,6 +344,19 @@ document.addEventListener('keydown', function(event) {
     closeKitModal();
   }
 });
+
+function openSocialModal() {
+  document.getElementById('socialModal').classList.add('active');
+}
+
+function closeSocialModal() {
+  document.getElementById('socialModal').classList.remove('active');
+}
+
+document.getElementById('socialModal').addEventListener('click', function(event) {
+  if(event.target === this) closeSocialModal();
+});
+
 </script>
 
 </body>
