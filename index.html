@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KudusSMP — привилегии Minecraft</title>
 <style>
-/* Основные стили (как у вас) */
 * { box-sizing:border-box; margin:0; padding:0; }
 html { scroll-behavior: smooth; }
 body { font-family: Inter, Arial, sans-serif; color:#fff; background:#090909; overflow-x:hidden; }
@@ -47,6 +46,8 @@ li::before { content:"✓ "; color:#55FFFF; font-weight:900; }
 .king-link { background: linear-gradient(135deg,#FFAA00,#ffd65c,#FFAA00); color:#111; }
 .prince-link { background: linear-gradient(135deg,#55FFFF,#ffffff,#55FFFF); color:#111; }
 .noob-link { background: linear-gradient(135deg,#555555,#888888,#555555); color:#fff; }
+.kit-link { margin-top:12px; width:100%; border:0; border-radius:16px; padding:13px; font-weight:900; font-size:16px; cursor:pointer; background:rgba(85,255,255,.2); color:#fff; border:1px solid rgba(255,255,255,.16); transition:.25s ease; }
+.kit-link:hover { background:rgba(85,255,255,.35); transform:translateY(-2px); }
 .rules,.legal { margin-top:40px; }
 .rules { padding:30px; border-radius:20px; background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.1); }
 .rules h2,.legal-block h2 { color:#fff; margin-bottom:12px; }
@@ -56,11 +57,13 @@ li::before { content:"✓ "; color:#55FFFF; font-weight:900; }
 .legal-block a { color:#55FFFF; }
 .modal-overlay { position:fixed; inset:0; z-index:99; display:none; align-items:center; justify-content:center; padding:20px; background: rgba(0,0,0,.72); backdrop-filter: blur(10px); }
 .modal-overlay.active { display:flex; }
-.buy-modal { width:min(430px,100%); border-radius:28px; padding:28px; background: linear-gradient(145deg, rgba(24,24,24,.96), rgba(8,8,8,.96)); border:1px solid rgba(255,255,255,.14); box-shadow:0 30px 100px rgba(0,0,0,.65); }
+.buy-modal { width:min(520px,100%); max-height:90vh; overflow:auto; border-radius:28px; padding:28px; background: linear-gradient(145deg, rgba(24,24,24,.96), rgba(8,8,8,.96)); border:1px solid rgba(255,255,255,.14); box-shadow:0 30px 100px rgba(0,0,0,.65); }
 .buy-modal h2 { font-size:30px; margin-bottom:10px; }
 .buy-modal p { color:rgba(255,255,255,.7); line-height:1.5; margin-bottom:18px; }
 .buy-modal input { width:100%; padding:16px 18px; border-radius:16px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.08); color:#fff; font-size:17px; outline:none; margin-bottom:14px; }
 .buy-modal input:focus { border-color:#55FFFF; box-shadow:0 0 20px rgba(85,255,255,.18); }
+.kit-image { width:100%; border-radius:16px; margin:12px 0 16px; display:block; background:rgba(255,255,255,.06); }
+.kit-list { color:rgba(255,255,255,.82); line-height:1.8; margin-bottom:18px; }
 .modal-actions { display:flex; gap:12px; }
 .modal-buy,.modal-close { flex:1; border:0; border-radius:16px; padding:15px; font-weight:950; cursor:pointer; transition:.25s ease; }
 .modal-buy { color:#111; background: linear-gradient(135deg,#55FFFF,#FFAA00); }
@@ -87,7 +90,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 </section>
 
 <section class="cards" id="donate">
-<!-- IMPERATOR -->
 <article class="card imperator featured">
 <img src="images/imperator.png" alt="Imperator привилегия">
 <div class="card-body">
@@ -100,7 +102,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 </div>
 </article>
 
-<!-- KING -->
 <article class="card king">
 <img src="images/king.png" alt="King привилегия">
 <div class="card-body">
@@ -113,7 +114,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 </div>
 </article>
 
-<!-- PRINCE -->
 <article class="card prince">
 <img src="images/prince.png" alt="Prince привилегия">
 <div class="card-body">
@@ -126,7 +126,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 </div>
 </article>
 
-<!-- NOOB -->
 <article class="card noob">
 <img src="images/noob.png" alt="Noob привилегия">
 <div class="card-body">
@@ -184,7 +183,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 </section>
 
 <section class="legal" id="contacts">
-<!-- Контакты и оферта полностью -->
 <div class="legal-block">
 <h2>📞 Контакты и поддержка</h2>
 <p><b>Проект:</b> KudusSMP</p>
@@ -201,50 +199,41 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 </div>
 <div class="legal-block">
 <h2>↩️ Возврат и отмена платежа</h2>
-<p>
-Пользователь может подать заявку на возврат денежных средств в течение 48 часов с момента оплаты, если привилегия не была выдана или выдана с ошибкой по вине проекта. 
-Возврат денежных средств осуществляется на те же платежные реквизиты, с которых производилась оплата. 
-Возврат возможен только при условии неоказания услуги или технической ошибки. 
-Заявка на возврат рассматривается в течение 24 часов с момента обращения в поддержку. 
-В случае одобрения возврат осуществляется в течение 72 часов с момента принятия решения.
-</p>
+<p>Пользователь может подать заявку на возврат денежных средств в течение 48 часов с момента оплаты, если привилегия не была выдана или выдана с ошибкой по вине проекта. Возврат денежных средств осуществляется на те же платежные реквизиты, с которых производилась оплата. Возврат возможен только при условии неоказания услуги или технической ошибки. Заявка на возврат рассматривается в течение 24 часов с момента обращения в поддержку. В случае одобрения возврат осуществляется в течение 72 часов с момента принятия решения.</p>
 </div>
-
 <div class="legal-block">
 <h2>📄 Оферта</h2>
-<p>
-Покупая привилегию, пользователь соглашается с условиями сервера, правилами проекта и условиями оказания виртуальных услуг. 
-Привилегия не является покупкой официальных товаров Minecraft, Mojang или Microsoft.
-</p>
+<p>Покупая привилегию, пользователь соглашается с условиями сервера, правилами проекта и условиями оказания виртуальных услуг. Привилегия не является покупкой официальных товаров Minecraft, Mojang или Microsoft.</p>
 </div>
-
 <div class="legal-block">
 <h2>🔒 Политика персональных данных</h2>
-<p>
-Сайт может обрабатывать ник игрока, контактные данные и информацию об оплате только для выдачи услуги и связи с пользователем. 
-Данные не передаются третьим лицам, кроме платёжных сервисов, необходимых для обработки платежа.
-</p>
+<p>Сайт может обрабатывать ник игрока, контактные данные и информацию об оплате только для выдачи услуги и связи с пользователем. Данные не передаются третьим лицам, кроме платёжных сервисов, необходимых для обработки платежа.</p>
 </div>
-
 <div class="legal-block">
 <h2>⚖️ Правообладатели</h2>
-<p>
-KudusSMP не является официальным продуктом Minecraft, Mojang или Microsoft. 
-Все названия и товарные знаки принадлежат их правообладателям. 
-На сайте продаются виртуальные услуги внутри частного игрового проекта.
-</p>
+<p>KudusSMP не является официальным продуктом Minecraft, Mojang или Microsoft. Все названия и товарные знаки принадлежат их правообладателям. На сайте продаются виртуальные услуги внутри частного игрового проекта.</p>
 </div>
 </section>
+</main>
 
-<!-- Модальное окно -->
 <div class="modal-overlay" id="buyModal">
   <div class="buy-modal">
     <h2 id="modalTitle">Покупка привилегии</h2>
     <p id="modalText">Введите игровой ник, чтобы мы знали, кому выдать привилегию.</p>
-    <input id="minecraftNick" type="text" placeholder="Ваш Minecraft ник" maxlength="20"/>
+    <input id="minecraftNick" type="text" placeholder="Ваш Minecraft ник" maxlength="20">
     <div class="modal-actions">
       <button class="modal-close" onclick="closeBuyModal()">Отмена</button>
       <button class="modal-buy" onclick="goToPayment()">Перейти к оплате</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="kitModal">
+  <div class="buy-modal">
+    <h2 id="kitModalTitle">Кит-набор</h2>
+    <div id="kitModalContent"></div>
+    <div class="modal-actions">
+      <button class="modal-close" onclick="closeKitModal()">Закрыть</button>
     </div>
   </div>
 </div>
@@ -269,25 +258,58 @@ function closeBuyModal() {
 
 function goToPayment() {
   const nick = document.getElementById('minecraftNick').value.trim();
-
   if (!nick) {
     alert('Введите игровой ник');
     return;
   }
+  window.location.href = '/api/pay?product=' + encodeURIComponent(selectedProduct) + '&nick=' + encodeURIComponent(nick);
+}
 
-  window.location.href =
-    '/api/pay?product=' +
-    encodeURIComponent(selectedProduct) +
-    '&nick=' +
-    encodeURIComponent(nick);
+const kits = {
+  IMPERATOR: {
+    image: 'kits/imperatorkit.png',
+    items: ['Кит King раз в 5 дней', 'Кит Imperator раз в неделю', 'Уникальные предметы']
+  },
+  KING: {
+    image: 'kits/kingkit.png',
+    items: ['Кит раз в 5 дней', 'Увеличенный приват', 'Эксклюзивные возможности']
+  },
+  PRINCE: {
+    image: 'kits/princekit.png',
+    items: ['Кит раз в 3 дня', 'Полезные команды', 'Увеличенный приват']
+  },
+  NOOB: {
+    image: 'kits/noobkit.png',
+    items: ['Кит раз в 1.5 дня', 'Базовые бонусы', 'Начальные возможности']
+  }
+};
+
+function openKitModal(rank) {
+  const kit = kits[rank];
+  let content = '<img class="kit-image" src="' + kit.image + '" alt="Кит ' + rank + '">';
+  content += '<div class="kit-list">' + kit.items.map(item => '• ' + item).join('<br>') + '</div>';
+  document.getElementById('kitModalTitle').textContent = 'Кит-набор: ' + rank;
+  document.getElementById('kitModalContent').innerHTML = content;
+  document.getElementById('kitModal').classList.add('active');
+}
+
+function closeKitModal() {
+  document.getElementById('kitModal').classList.remove('active');
 }
 
 document.getElementById('buyModal').addEventListener('click', function(event) {
-  if(event.target === this) closeBuyModal();
+  if (event.target === this) closeBuyModal();
+});
+
+document.getElementById('kitModal').addEventListener('click', function(event) {
+  if (event.target === this) closeKitModal();
 });
 
 document.addEventListener('keydown', function(event) {
-  if(event.key === 'Escape') closeBuyModal();
+  if (event.key === 'Escape') {
+    closeBuyModal();
+    closeKitModal();
+  }
 });
 </script>
 
