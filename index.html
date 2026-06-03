@@ -243,7 +243,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
     <div class="modal-actions">
       <button class="modal-close" onclick="closeBuyModal()">Отмена</button>
       <button class="modal-buy" onclick="goToPayment()">Перейти к оплате</button>
-      <a class="social-link" href="https://www.tiktok.com/@valerista48" target="_blank">Наш TikTok</a>
     </div>
   </div>
 </div>
@@ -254,26 +253,27 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
     <div id="kitModalContent"></div>
     <div class="modal-actions">
       <button class="modal-close" onclick="closeKitModal()">Закрыть</button>
-      <a class="social-link" href="https://www.tiktok.com/@valerista48" target="_blank">Наш TikTok</a>
     </div>
   </div>
 </div>
 
 
+
 <!-- Модальное окно соцсетей -->
 <div class="modal-overlay" id="socialModal">
   <div class="buy-modal">
-<h2>Наши соцсети</h2>
-<p>Выбери, куда перейти:</p>
-<a class="social-link" href="https://discord.gg/ta6bNw3kNQ" target="_blank">Наш Discord</a>
-<a class="social-link" href="https://t.me/kudusSMP" target="_blank">Наш Telegram</a>
-<a class="social-link" href="https://www.tiktok.com/@valerista48" target="_blank">Наш TikTok</a>
-<div class="modal-actions">
-  <button class="modal-close" onclick="closeSocialModal()">Закрыть</button>
+    <h2>Наши соцсети</h2>
+    <p>Выбери, куда перейти:</p>
+
+    <a class="social-link" href="https://discord.gg/ta6bNw3kNQ" target="_blank">Наш Discord</a>
+    <a class="social-link" href="https://t.me/kudusSMP" target="_blank">Наш Telegram</a>
+    <a class="social-link" href="https://www.tiktok.com/@valerista48" target="_blank">Наш TikTok</a>
+
+    <div class="modal-actions">
+      <button class="modal-close" onclick="closeSocialModal()">Закрыть</button>
+    </div>
+  </div>
 </div>
-
-
-
 
 <script>
 let selectedProduct = '';
@@ -344,6 +344,7 @@ document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
     closeBuyModal();
     closeKitModal();
+    closeSocialModal();
   }
 });
 
