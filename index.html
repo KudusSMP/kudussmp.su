@@ -167,6 +167,39 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   color:#fff;
 }
 
+
+.suffix-darkred { color:#AA0000; }
+.suffix-pink-bold { color:#FF55FF; font-weight:950; }
+.suffix-aqua { color:#55FFFF; }
+.suffix-yellow { color:#FFFF55; }
+.suffix-darkblue { color:#0000AA; }
+.suffix-red { color:#FF5555; }
+.suffix-green-bold { color:#55FF55; font-weight:950; }
+.suffix-white { color:#FFFFFF; }
+
+
+.suffix-choice-row {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin:12px 0 16px;
+}
+.suffix-choice {
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:14px;
+  padding:12px;
+  background:rgba(255,255,255,.08);
+  cursor:pointer;
+  font-weight:950;
+  transition:.25s ease;
+}
+.suffix-choice:hover,
+.suffix-choice.active {
+  transform:translateY(-2px);
+  border-color:#55FFFF;
+  box-shadow:0 0 18px rgba(85,255,255,.16);
+}
+
 </style>
 </head>
 <body>
@@ -242,7 +275,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="ПВП">
     <div class="card-body">
-      <div class="rank">ПВП</div>
+      <div class="rank suffix-darkred">ПВП</div>
       <div class="price">49₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_PVP','49₽')">Купить титул</button>
@@ -251,7 +284,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="Батя">
     <div class="card-body">
-      <div class="rank">Батя</div>
+      <div class="rank suffix-darkred">Батя</div>
       <div class="price">69₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BATYA','69₽')">Купить титул</button>
@@ -260,7 +293,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="ЧСВ!">
     <div class="card-body">
-      <div class="rank">ЧСВ!</div>
+      <div class="rank suffix-darkred">ЧСВ!</div>
       <div class="price">99₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_CHSV','99₽')">Купить титул</button>
@@ -269,7 +302,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="Mace">
     <div class="card-body">
-      <div class="rank">Mace</div>
+      <div class="rank suffix-pink-bold">Mace</div>
       <div class="price">59₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MACE','59₽')">Купить титул</button>
@@ -278,7 +311,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="Мяу">
     <div class="card-body">
-      <div class="rank">Мяу</div>
+      <div class="rank suffix-aqua">Мяу</div>
       <div class="price">19₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MYAU','19₽')">Купить титул</button>
@@ -287,7 +320,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="Кис">
     <div class="card-body">
-      <div class="rank">Кис</div>
+      <div class="rank suffix-yellow">Кис</div>
       <div class="price">19₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KIS','19₽')">Купить титул</button>
@@ -296,7 +329,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="БДСМ">
     <div class="card-body">
-      <div class="rank">БДСМ</div>
+      <div class="rank suffix-darkblue">БДСМ</div>
       <div class="price">35₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BDSM','35₽')">Купить титул</button>
@@ -305,7 +338,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="Лох">
     <div class="card-body">
-      <div class="rank">Лох</div>
+      <div class="rank suffix-red">Лох</div>
       <div class="price">15₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_LOH','15₽')">Купить титул</button>
@@ -314,7 +347,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="JUDE">
     <div class="card-body">
-      <div class="rank">JUDE</div>
+      <div class="rank suffix-green-bold">JUDE</div>
       <div class="price">59₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_JUDE','59₽')">Купить титул</button>
@@ -323,7 +356,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="Трап">
     <div class="card-body">
-      <div class="rank">Трап</div>
+      <div class="rank suffix-yellow">Трап</div>
       <div class="price">49₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_TRAP','49₽')">Купить титул</button>
@@ -332,7 +365,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="Кек">
     <div class="card-body">
-      <div class="rank">Кек</div>
+      <div class="rank suffix-yellow">Кек</div>
       <div class="price">15₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KEK','15₽')">Купить титул</button>
@@ -341,7 +374,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <article class="card">
     <img src="/images/chsv.png" alt="0iq">
     <div class="card-body">
-      <div class="rank">0iq</div>
+      <div class="rank suffix-white">0iq</div>
       <div class="price">29₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_0IQ','29₽')">Купить титул</button>
@@ -464,23 +497,22 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <button class="rank-choice mc-king" onclick="selectPreviewRank('KING')">King</button>
       <button class="rank-choice mc-imperator" onclick="selectPreviewRank('IMPERATOR')">Imperator</button>
     </div>
-
-    
     <p>Выбери суффикс:</p>
-    <select id="previewSuffixSelect" class="preview-select">
-      <option value="ПВП">ПВП</option>
-      <option value="Батя">Батя</option>
-      <option value="ЧСВ!">ЧСВ!</option>
-      <option value="Mace">Mace</option>
-      <option value="Мяу">Мяу</option>
-      <option value="Кис">Кис</option>
-      <option value="БДСМ">БДСМ</option>
-      <option value="Лох">Лох</option>
-      <option value="JUDE">JUDE</option>
-      <option value="Трап">Трап</option>
-      <option value="Кек">Кек</option>
-      <option value="0iq">0iq</option>
-    </select>
+    <div class="suffix-choice-row">
+      <button class="suffix-choice suffix-darkred active" onclick="selectPreviewSuffix('ПВП','suffix-darkred', this)">ПВП</button>
+      <button class="suffix-choice suffix-darkred" onclick="selectPreviewSuffix('Батя','suffix-darkred', this)">Батя</button>
+      <button class="suffix-choice suffix-darkred" onclick="selectPreviewSuffix('ЧСВ!','suffix-darkred', this)">ЧСВ!</button>
+      <button class="suffix-choice suffix-pink-bold" onclick="selectPreviewSuffix('Mace','suffix-pink-bold', this)">Mace</button>
+      <button class="suffix-choice suffix-aqua" onclick="selectPreviewSuffix('Мяу','suffix-aqua', this)">Мяу</button>
+      <button class="suffix-choice suffix-yellow" onclick="selectPreviewSuffix('Кис','suffix-yellow', this)">Кис</button>
+      <button class="suffix-choice suffix-darkblue" onclick="selectPreviewSuffix('БДСМ','suffix-darkblue', this)">БДСМ</button>
+      <button class="suffix-choice suffix-red" onclick="selectPreviewSuffix('Лох','suffix-red', this)">Лох</button>
+      <button class="suffix-choice suffix-green-bold" onclick="selectPreviewSuffix('JUDE','suffix-green-bold', this)">JUDE</button>
+      <button class="suffix-choice suffix-yellow" onclick="selectPreviewSuffix('Трап','suffix-yellow', this)">Трап</button>
+      <button class="suffix-choice suffix-yellow" onclick="selectPreviewSuffix('Кек','suffix-yellow', this)">Кек</button>
+      <button class="suffix-choice suffix-white" onclick="selectPreviewSuffix('0iq','suffix-white', this)">0iq</button>
+    </div>
+
 
     <p>Напиши свой ник:</p>
     <input id="previewNick" type="text" placeholder="Ваш Minecraft ник" maxlength="20">
@@ -601,6 +633,7 @@ document.getElementById('socialModal').addEventListener('click', function(event)
 
 let selectedPreviewSuffix = '';
 let selectedPreviewRank = 'NOOB';
+let selectedPreviewSuffixClass = 'suffix-darkred';
 
 const previewRanks = {
   NOOB: { text: 'Noob', className: 'mc-noob' },
@@ -611,12 +644,13 @@ const previewRanks = {
 
 function openTitlePreview() {
   selectedPreviewSuffix = 'ПВП';
+  selectedPreviewSuffixClass = 'suffix-darkred';
   selectedPreviewRank = 'NOOB';
   document.getElementById('previewNick').value = '';
-  document.getElementById('previewSuffixSelect').value = 'ПВП';
   document.getElementById('previewResult').textContent = 'Здесь появится пример';
   document.getElementById('titlePreviewModal').classList.add('active');
   updatePreviewRankButtons();
+  updatePreviewSuffixButtons();
   setTimeout(() => document.getElementById('previewNick').focus(), 100);
 }
 
@@ -652,9 +686,31 @@ function escapeHtml(text) {
     .replaceAll("'", '&#039;');
 }
 
+
+function selectPreviewSuffix(suffix, className, button) {
+  selectedPreviewSuffix = suffix;
+  selectedPreviewSuffixClass = className;
+  updatePreviewSuffixButtons();
+
+  if (button) {
+    button.classList.add('active');
+  }
+}
+
+function updatePreviewSuffixButtons() {
+  document.querySelectorAll('.suffix-choice').forEach(button => {
+    button.classList.remove('active');
+  });
+
+  document.querySelectorAll('.suffix-choice').forEach(button => {
+    if (button.textContent.trim() === selectedPreviewSuffix) {
+      button.classList.add('active');
+    }
+  });
+}
+
 function applyTitlePreview() {
   const nick = document.getElementById('previewNick').value.trim();
-  const suffix = document.getElementById('previewSuffixSelect').value;
 
   if (!nick) {
     alert('Введите игровой ник');
@@ -665,8 +721,8 @@ function applyTitlePreview() {
 
   document.getElementById('previewResult').innerHTML =
     '<span class="' + rank.className + '">' + rank.text + '</span> ' +
-    '<span class="preview-nick">' + escapeHtml(nick) + '</span>' +
-    '<span class="preview-suffix">' + escapeHtml(suffix) + '</span>';
+    '<span class="preview-nick">' + escapeHtml(nick) + '</span> ' +
+    '<span class="' + selectedPreviewSuffixClass + '">' + escapeHtml(selectedPreviewSuffix) + '</span>';
 }
 
 document.getElementById('titlePreviewModal').addEventListener('click', function(event) {
