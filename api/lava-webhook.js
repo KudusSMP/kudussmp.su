@@ -10,18 +10,18 @@ const commands = {
   PRINCE: 'lp user {nick} parent set prince',
   NOOB: 'lp user {nick} parent set noob',
 
-  TITLE_PVP: 'lp user {nick} meta setsuffix 100 "&4ПВП &f"',
-  TITLE_BATYA: 'lp user {nick} meta setsuffix 100 "&4Батя &f"',
-  TITLE_CHSV: 'lp user {nick} meta setsuffix 100 "&4ЧСВ! &f "',
-  TITLE_MACE: 'lp user {nick} meta setsuffix 100 "&d&lMace &f"',
-  TITLE_MYAU: 'lp user {nick} meta setsuffix 100 "&bМяу &F"',
-  TITLE_KIS: 'lp user {nick} meta setsuffix 100 "&eКис &F"',
-  TITLE_BDSM: 'lp user {nick} meta setsuffix 100 "&1БДСМ &F"',
-  TITLE_LOH: 'lp user {nick} meta setsuffix 100 "&cЛох &f"',
-  TITLE_JUDE: 'lp user {nick} meta setsuffix 100 "&a&lJUDE &f"',
-  TITLE_TRAP: 'lp user {nick} meta setsuffix 100 "&eТрап &f"',
-  TITLE_KEK: 'lp user {nick} meta setsuffix 100 "&eКек &f"',
-  TITLE_0IQ: 'lp user {nick} meta setsuffix 100 "&f0iq &f"'
+  TITLE_PVP: 'lp user {nick} meta setsuffix 100 " &4ПВП &f"',
+  TITLE_BATYA: 'lp user {nick} meta setsuffix 100 " &4Батя &f"',
+  TITLE_CHSV: 'lp user {nick} meta setsuffix 100 " &4ЧСВ! &f "',
+  TITLE_MACE: 'lp user {nick} meta setsuffix 100 " &d&lMace &f"',
+  TITLE_MYAU: 'lp user {nick} meta setsuffix 100 " &bМяу &F"',
+  TITLE_KIS: 'lp user {nick} meta setsuffix 100 " &eКис &F"',
+  TITLE_BDSM: 'lp user {nick} meta setsuffix 100 " &1БДСМ &F"',
+  TITLE_LOH: 'lp user {nick} meta setsuffix 100 " &cЛох &f"',
+  TITLE_JUDE: 'lp user {nick} meta setsuffix 100 " &a&lJUDE &f"',
+  TITLE_TRAP: 'lp user {nick} meta setsuffix 100 " &eТрап &f"',
+  TITLE_KEK: 'lp user {nick} meta setsuffix 100 " &eКек &f"',
+  TITLE_0IQ: 'lp user {nick} meta setsuffix 100 " &f0iq &f"'
 };
 
 export default async function handler(req, res) {
