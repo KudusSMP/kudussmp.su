@@ -149,6 +149,24 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 .preview-nick { color:#ffffff; }
 .preview-suffix { color:#ffffff; margin-left:6px; }
 
+
+.preview-select {
+  width:100%;
+  padding:14px 16px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+  outline:none;
+  margin-bottom:16px;
+}
+.preview-select option {
+  background:#111;
+  color:#fff;
+}
+
 </style>
 </head>
 <body>
@@ -216,7 +234,10 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 </section>
 
 <section class="rules" id="titles">
-<h2>🎖 Титулы</h2>
+<div style="display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:18px;">
+  <h2 style="margin-bottom:0;">🎖 Титулы</h2>
+  <button class="preview-link" style="width:auto; min-width:210px; margin-top:0;" onclick="openTitlePreview()">Посмотреть на себе</button>
+</div>
 <div class="cards">
   <article class="card">
     <img src="/images/chsv.png" alt="ПВП">
@@ -225,7 +246,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">49₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_PVP','49₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('ПВП')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -235,7 +255,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">69₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BATYA','69₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('Батя')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -245,7 +264,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">99₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_CHSV','99₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('ЧСВ!')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -255,7 +273,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">59₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MACE','59₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('Mace')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -265,7 +282,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">19₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MYAU','19₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('Мяу')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -275,7 +291,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">19₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KIS','19₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('Кис')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -285,7 +300,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">35₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BDSM','35₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('БДСМ')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -295,7 +309,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">15₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_LOH','15₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('Лох')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -305,7 +318,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">59₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_JUDE','59₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('JUDE')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -315,7 +327,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">49₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_TRAP','49₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('Трап')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -325,7 +336,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">15₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KEK','15₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('Кек')">Посмотреть на себе</button>
     </div>
   </article>
   <article class="card">
@@ -335,7 +345,6 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <div class="price">29₽ <small>/ навсегда</small></div>
       <p>Титул будет отображаться как суффикс рядом с ником.</p>
       <button class="buy-link prince-link" onclick="openBuyModal('TITLE_0IQ','29₽')">Купить титул</button>
-      <button class="preview-link" onclick="openTitlePreview('0iq')">Посмотреть на себе</button>
     </div>
   </article>
 </div>
@@ -450,11 +459,28 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
     <p>Выбери свой донат:</p>
 
     <div class="rank-choice-row">
-      <button class="rank-choice mc-noob" onclick="selectPreviewRank('NOOB')">&8Noob</button>
-      <button class="rank-choice mc-prince" onclick="selectPreviewRank('PRINCE')">&bPrince</button>
-      <button class="rank-choice mc-king" onclick="selectPreviewRank('KING')">&6&lKing</button>
-      <button class="rank-choice mc-imperator" onclick="selectPreviewRank('IMPERATOR')">&4&lImperator</button>
+      <button class="rank-choice mc-noob" onclick="selectPreviewRank('NOOB')">Noob</button>
+      <button class="rank-choice mc-prince" onclick="selectPreviewRank('PRINCE')">Prince</button>
+      <button class="rank-choice mc-king" onclick="selectPreviewRank('KING')">King</button>
+      <button class="rank-choice mc-imperator" onclick="selectPreviewRank('IMPERATOR')">Imperator</button>
     </div>
+
+    
+    <p>Выбери суффикс:</p>
+    <select id="previewSuffixSelect" class="preview-select">
+      <option value="ПВП">ПВП</option>
+      <option value="Батя">Батя</option>
+      <option value="ЧСВ!">ЧСВ!</option>
+      <option value="Mace">Mace</option>
+      <option value="Мяу">Мяу</option>
+      <option value="Кис">Кис</option>
+      <option value="БДСМ">БДСМ</option>
+      <option value="Лох">Лох</option>
+      <option value="JUDE">JUDE</option>
+      <option value="Трап">Трап</option>
+      <option value="Кек">Кек</option>
+      <option value="0iq">0iq</option>
+    </select>
 
     <p>Напиши свой ник:</p>
     <input id="previewNick" type="text" placeholder="Ваш Minecraft ник" maxlength="20">
@@ -583,10 +609,11 @@ const previewRanks = {
   IMPERATOR: { text: 'Imperator', className: 'mc-imperator' }
 };
 
-function openTitlePreview(suffix) {
-  selectedPreviewSuffix = suffix;
+function openTitlePreview() {
+  selectedPreviewSuffix = 'ПВП';
   selectedPreviewRank = 'NOOB';
   document.getElementById('previewNick').value = '';
+  document.getElementById('previewSuffixSelect').value = 'ПВП';
   document.getElementById('previewResult').textContent = 'Здесь появится пример';
   document.getElementById('titlePreviewModal').classList.add('active');
   updatePreviewRankButtons();
@@ -627,6 +654,7 @@ function escapeHtml(text) {
 
 function applyTitlePreview() {
   const nick = document.getElementById('previewNick').value.trim();
+  const suffix = document.getElementById('previewSuffixSelect').value;
 
   if (!nick) {
     alert('Введите игровой ник');
@@ -638,7 +666,7 @@ function applyTitlePreview() {
   document.getElementById('previewResult').innerHTML =
     '<span class="' + rank.className + '">' + rank.text + '</span> ' +
     '<span class="preview-nick">' + escapeHtml(nick) + '</span>' +
-    '<span class="preview-suffix">[' + escapeHtml(selectedPreviewSuffix) + ']</span>';
+    '<span class="preview-suffix">' + escapeHtml(suffix) + '</span>';
 }
 
 document.getElementById('titlePreviewModal').addEventListener('click', function(event) {
