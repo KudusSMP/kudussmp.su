@@ -235,27 +235,20 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 .card:hover::after {
   opacity:1;
 }
-.title-controls {
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:0 0 20px;
+
+.title-carousel{
+ display:flex;
+ gap:20px;
+ overflow-x:auto;
+ padding:10px 4px 16px;
+ scroll-behavior:smooth;
 }
-.title-filter-btn {
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:14px;
-  padding:11px 14px;
-  cursor:pointer;
-  font-weight:900;
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  transition:.25s ease;
-}
-.title-filter-btn:hover,
-.title-filter-btn.active {
-  transform:translateY(-2px);
-  border-color:#55FFFF;
-  background:rgba(85,255,255,.18);
+.title-carousel::-webkit-scrollbar{height:8px;}
+.title-carousel::-webkit-scrollbar-thumb{background:rgba(85,255,255,.35);border-radius:999px;}
+.title-carousel .title-card{
+ flex:0 0 calc((100% - 60px)/4);
+ min-width:260px;
+ max-width:320px;
 }
 
 </style>
@@ -330,100 +323,90 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <button class="preview-link" style="width:auto; min-width:210px; margin-top:0;" onclick="openTitlePreview()">Посмотреть на себе</button>
 </div>
 
-<div class="title-controls">
-  <button class="title-filter-btn active" onclick="filterTitles('all', this)">Все</button>
-  <button class="title-filter-btn" onclick="filterTitles('cheap', this)">Дешёвые</button>
-  <button class="title-filter-btn" onclick="filterTitles('medium', this)">Средние</button>
-  <button class="title-filter-btn" onclick="filterTitles('rare', this)">Редкие</button>
-  <button class="title-filter-btn" onclick="sortTitles('asc')">Сначала дешёвые</button>
-  <button class="title-filter-btn" onclick="sortTitles('desc')">Сначала дорогие</button>
-</div>
-<div class="cards" id="titleCards">
-  <article class="card title-card" data-price="49">
-<div class="card-body">
-      <div class="rank suffix-darkred">ПВП</div>
-      <div class="price">49₽ <small>/ навсегда</small></div>
-            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_PVP','49₽')">Купить титул</button>
-    </div>
-  </article>
-  <article class="card title-card" data-price="69">
-<div class="card-body">
-      <div class="rank suffix-darkred">Батя</div>
-      <div class="price">69₽ <small>/ навсегда</small></div>
-            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BATYA','69₽')">Купить титул</button>
-    </div>
-  </article>
-  <article class="card title-card" data-price="99">
+<div class="title-carousel" id="titleCards"><article class="card title-card" data-price="99">
 <div class="card-body">
       <div class="rank suffix-darkred">ЧСВ!</div>
       <div class="price">99₽ <small>/ навсегда</small></div>
             <button class="buy-link prince-link" onclick="openBuyModal('TITLE_CHSV','99₽')">Купить титул</button>
     </div>
   </article>
-  <article class="card title-card" data-price="59">
+<article class="card title-card" data-price="69">
+<div class="card-body">
+      <div class="rank suffix-darkred">Батя</div>
+      <div class="price">69₽ <small>/ навсегда</small></div>
+            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BATYA','69₽')">Купить титул</button>
+    </div>
+  </article>
+<article class="card title-card" data-price="59">
 <div class="card-body">
       <div class="rank suffix-pink-bold">Mace</div>
       <div class="price">59₽ <small>/ навсегда</small></div>
             <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MACE','59₽')">Купить титул</button>
     </div>
   </article>
-  <article class="card title-card" data-price="19">
-<div class="card-body">
-      <div class="rank suffix-aqua">Мяу</div>
-      <div class="price">19₽ <small>/ навсегда</small></div>
-            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MYAU','19₽')">Купить титул</button>
-    </div>
-  </article>
-  <article class="card title-card" data-price="19">
-<div class="card-body">
-      <div class="rank suffix-yellow">Кис</div>
-      <div class="price">19₽ <small>/ навсегда</small></div>
-            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KIS','19₽')">Купить титул</button>
-    </div>
-  </article>
-  <article class="card title-card" data-price="35">
-<div class="card-body">
-      <div class="rank suffix-darkblue">БДСМ</div>
-      <div class="price">35₽ <small>/ навсегда</small></div>
-            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BDSM','35₽')">Купить титул</button>
-    </div>
-  </article>
-  <article class="card title-card" data-price="15">
-<div class="card-body">
-      <div class="rank suffix-red">Лох</div>
-      <div class="price">15₽ <small>/ навсегда</small></div>
-            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_LOH','15₽')">Купить титул</button>
-    </div>
-  </article>
-  <article class="card title-card" data-price="59">
+<article class="card title-card" data-price="59">
 <div class="card-body">
       <div class="rank suffix-green-bold">JUDE</div>
       <div class="price">59₽ <small>/ навсегда</small></div>
             <button class="buy-link prince-link" onclick="openBuyModal('TITLE_JUDE','59₽')">Купить титул</button>
     </div>
   </article>
-  <article class="card title-card" data-price="49">
+<article class="card title-card" data-price="49">
+<div class="card-body">
+      <div class="rank suffix-darkred">ПВП</div>
+      <div class="price">49₽ <small>/ навсегда</small></div>
+            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_PVP','49₽')">Купить титул</button>
+    </div>
+  </article>
+<article class="card title-card" data-price="49">
 <div class="card-body">
       <div class="rank suffix-yellow">Трап</div>
       <div class="price">49₽ <small>/ навсегда</small></div>
             <button class="buy-link prince-link" onclick="openBuyModal('TITLE_TRAP','49₽')">Купить титул</button>
     </div>
   </article>
-  <article class="card title-card" data-price="15">
+<article class="card title-card" data-price="35">
 <div class="card-body">
-      <div class="rank suffix-yellow">Кек</div>
-      <div class="price">15₽ <small>/ навсегда</small></div>
-            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KEK','15₽')">Купить титул</button>
+      <div class="rank suffix-darkblue">БДСМ</div>
+      <div class="price">35₽ <small>/ навсегда</small></div>
+            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BDSM','35₽')">Купить титул</button>
     </div>
   </article>
-  <article class="card title-card" data-price="29">
+<article class="card title-card" data-price="29">
 <div class="card-body">
       <div class="rank suffix-white">0iq</div>
       <div class="price">29₽ <small>/ навсегда</small></div>
             <button class="buy-link prince-link" onclick="openBuyModal('TITLE_0IQ','29₽')">Купить титул</button>
     </div>
   </article>
-</div>
+<article class="card title-card" data-price="19">
+<div class="card-body">
+      <div class="rank suffix-aqua">Мяу</div>
+      <div class="price">19₽ <small>/ навсегда</small></div>
+            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MYAU','19₽')">Купить титул</button>
+    </div>
+  </article>
+<article class="card title-card" data-price="19">
+<div class="card-body">
+      <div class="rank suffix-yellow">Кис</div>
+      <div class="price">19₽ <small>/ навсегда</small></div>
+            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KIS','19₽')">Купить титул</button>
+    </div>
+  </article>
+<article class="card title-card" data-price="15">
+<div class="card-body">
+      <div class="rank suffix-red">Лох</div>
+      <div class="price">15₽ <small>/ навсегда</small></div>
+            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_LOH','15₽')">Купить титул</button>
+    </div>
+  </article>
+<article class="card title-card" data-price="15">
+<div class="card-body">
+      <div class="rank suffix-yellow">Кек</div>
+      <div class="price">15₽ <small>/ навсегда</small></div>
+            <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KEK','15₽')">Купить титул</button>
+    </div>
+  </article></div>
 </section>
 
 <section class="rules" id="rules">
@@ -811,44 +794,7 @@ document.getElementById('titlePreviewModal').addEventListener('click', function(
 });
 
 
-function setActiveTitleFilter(button) {
-  document.querySelectorAll('.title-filter-btn').forEach(btn => {
-    if (btn.textContent.includes('Все') || btn.textContent.includes('Дешёвые') || btn.textContent.includes('Средние') || btn.textContent.includes('Редкие')) {
-      btn.classList.remove('active');
-    }
-  });
-  if (button) button.classList.add('active');
-}
 
-function filterTitles(type, button) {
-  setActiveTitleFilter(button);
-
-  document.querySelectorAll('#titleCards .title-card').forEach(card => {
-    const price = Number(card.dataset.price || 0);
-    let show = true;
-
-    if (type === 'cheap') show = price <= 30;
-    if (type === 'medium') show = price >= 31 && price <= 60;
-    if (type === 'rare') show = price >= 61;
-
-    card.style.display = show ? 'flex' : 'none';
-  });
-}
-
-function sortTitles(direction) {
-  const container = document.getElementById('titleCards');
-  if (!container) return;
-
-  const cards = Array.from(container.querySelectorAll('.title-card'));
-
-  cards.sort((a, b) => {
-    const pa = Number(a.dataset.price || 0);
-    const pb = Number(b.dataset.price || 0);
-    return direction === 'asc' ? pa - pb : pb - pa;
-  });
-
-  cards.forEach(card => container.appendChild(card));
-}
 
 </script>
 
