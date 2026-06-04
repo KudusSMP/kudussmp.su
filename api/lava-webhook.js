@@ -10,17 +10,17 @@ const commands = {
   PRINCE: 'lp user {nick} parent set prince',
   NOOB: 'lp user {nick} parent set noob',
 
-  TITLE_PVP: 'lp user {nick} meta setsuffix 100 "&fПВП"',
-  TITLE_BATYA: 'lp user {nick} meta setsuffix 100 "&fБатя"',
-  TITLE_CHSV: 'lp user {nick} meta setsuffix 100 "&fЧСВ!"',
-  TITLE_MACE: 'lp user {nick} meta setsuffix 100 "&fMace"',
-  TITLE_MYAU: 'lp user {nick} meta setsuffix 100 "&fМяу"',
-  TITLE_KIS: 'lp user {nick} meta setsuffix 100 "&fКис"',
-  TITLE_BDSM: 'lp user {nick} meta setsuffix 100 "&fБДСМ"',
-  TITLE_LOH: 'lp user {nick} meta setsuffix 100 "&fЛох"',
-  TITLE_JUDE: 'lp user {nick} meta setsuffix 100 "&fJUDE"',
-  TITLE_TRAP: 'lp user {nick} meta setsuffix 100 "&fТрап"',
-  TITLE_KEK: 'lp user {nick} meta setsuffix 100 "&fКек"',
+  TITLE_PVP: 'lp user {nick} meta setsuffix 100 "&4ПВП"',
+  TITLE_BATYA: 'lp user {nick} meta setsuffix 100 "&4Батя"',
+  TITLE_CHSV: 'lp user {nick} meta setsuffix 100 "&4ЧСВ!"',
+  TITLE_MACE: 'lp user {nick} meta setsuffix 100 "&d&lMace"',
+  TITLE_MYAU: 'lp user {nick} meta setsuffix 100 "&bМяу"',
+  TITLE_KIS: 'lp user {nick} meta setsuffix 100 "&eКис"',
+  TITLE_BDSM: 'lp user {nick} meta setsuffix 100 "&1БДСМ"',
+  TITLE_LOH: 'lp user {nick} meta setsuffix 100 "&cЛох"',
+  TITLE_JUDE: 'lp user {nick} meta setsuffix 100 "&a&lJUDE"',
+  TITLE_TRAP: 'lp user {nick} meta setsuffix 100 "&eТрап"',
+  TITLE_KEK: 'lp user {nick} meta setsuffix 100 "&eКек"',
   TITLE_0IQ: 'lp user {nick} meta setsuffix 100 "&f0iq"'
 };
 
