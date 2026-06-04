@@ -5,10 +5,11 @@ const SECRET_KEY = process.env.LAVA_SECRET_KEY;
 const SITE_URL = 'https://kudussmp.su';
 
 const prices = {
-  IMPERATOR: 499,
+IMPERATOR: 499,
   KING: 199,
   PRINCE: 99,
   NOOB: 49
+  TITLE_0IQ: 29,
 };
 
 function makeSignature(jsonString) {
