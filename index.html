@@ -531,10 +531,36 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <script>
 let selectedProduct = '';
 
+const productNames = {
+  IMPERATOR: '<span style="color:#AA0000">IMPERATOR</span>',
+  KING: '<span style="color:#FFAA00">KING</span>',
+  PRINCE: '<span style="color:#55FFFF">PRINCE</span>',
+  NOOB: '<span style="color:#555555">NOOB</span>',
+
+  TITLE_PVP: '<span style="color:#AA0000">ПВП</span>',
+  TITLE_BATYA: '<span style="color:#AA0000">Батя</span>',
+  TITLE_CHSV: '<span style="color:#AA0000">ЧСВ!</span>',
+  TITLE_MACE: '<span style="color:#FF55FF;font-weight:950">Mace</span>',
+  TITLE_MYAU: '<span style="color:#55FFFF">Мяу</span>',
+  TITLE_KIS: '<span style="color:#FFFF55">Кис</span>',
+  TITLE_BDSM: '<span style="color:#0000AA">БДСМ</span>',
+  TITLE_LOH: '<span style="color:#FF5555">Лох</span>',
+  TITLE_JUDE: '<span style="color:#55FF55;font-weight:950">JUDE</span>',
+  TITLE_TRAP: '<span style="color:#FFFF55">Трап</span>',
+  TITLE_KEK: '<span style="color:#FFFF55">Кек</span>',
+  TITLE_0IQ: '<span style="color:#FFFFFF">0iq</span>'
+};
+
+
 function openBuyModal(product, price) {
   selectedProduct = product;
-  document.getElementById('modalTitle').textContent = 'Купить ' + product;
-  document.getElementById('modalText').textContent = 'Стоимость: ' + price + '. Введите игровой ник для выдачи привилегии.';
+
+  document.getElementById('modalTitle').innerHTML =
+    'Купить ' + (productNames[product] || product);
+
+  document.getElementById('modalText').textContent =
+    'Стоимость: ' + price + '. Введите игровой ник для выдачи.';
+
   document.getElementById('minecraftNick').value = '';
   document.getElementById('buyModal').classList.add('active');
   setTimeout(() => document.getElementById('minecraftNick').focus(), 100);
