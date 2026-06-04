@@ -5,10 +5,11 @@ const RCON_PORT = Number(process.env.RCON_PORT || 25575);
 const RCON_PASSWORD = process.env.RCON_PASSWORD;
 
 const commands = {
-  IMPERATOR: 'lp user {nick} parent set imperator',
+IMPERATOR: 'lp user {nick} parent set imperator',
   KING: 'lp user {nick} parent set king',
   PRINCE: 'lp user {nick} parent set prince',
-  NOOB: 'lp user {nick} parent set noob'
+  NOOB: 'lp user {nick} parent set noob',
+  TITLE_0IQ: 'lp user {nick} meta setsuffix 100 "&f[0iq]"'
 };
 
 export default async function handler(req, res) {
