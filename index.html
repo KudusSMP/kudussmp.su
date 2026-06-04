@@ -208,6 +208,13 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   justify-content:flex-start;
 }
 
+
+.preview-player-green{
+  color:#55FF55;
+  font-weight:900;
+}
+
+.mc-player{color:#55FF55;font-weight:900;}
 </style>
 </head>
 <body>
@@ -474,6 +481,11 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   <div class="buy-modal">
     <h2>Посмотреть на себе</h2>
     <p>Выбери свой донат:</p>
+<div style="display:flex;justify-content:center;margin:10px 0 14px 0;">
+  <button class="rank-choice player-choice active" onclick="selectPreviewRank('PLAYER')" style="min-width:220px;color:#55FF55;">
+    Игрок
+  </button>
+</div>
 
     <div class="rank-choice-row">
       <button class="rank-choice mc-noob" onclick="selectPreviewRank('NOOB')">Noob</button>
@@ -642,10 +654,11 @@ document.getElementById('socialModal').addEventListener('click', function(event)
 
 
 let selectedPreviewSuffix = '';
-let selectedPreviewRank = 'NOOB';
+let selectedPreviewRank = 'PLAYER';
 let selectedPreviewSuffixClass = 'suffix-darkred';
 
 const previewRanks = {
+  PLAYER: { text: 'Игрок', className: 'mc-player' },
   NOOB: { text: 'Noob', className: 'mc-noob' },
   PRINCE: { text: 'Prince', className: 'mc-prince' },
   KING: { text: 'King', className: 'mc-king' },
@@ -655,7 +668,7 @@ const previewRanks = {
 function openTitlePreview() {
   selectedPreviewSuffix = 'ПВП';
   selectedPreviewSuffixClass = 'suffix-darkred';
-  selectedPreviewRank = 'NOOB';
+  selectedPreviewRank = 'PLAYER';
   document.getElementById('previewNick').value = '';
   document.getElementById('previewResult').textContent = 'Здесь появится пример';
   document.getElementById('titlePreviewModal').classList.add('active');
@@ -678,18 +691,24 @@ function updatePreviewRankButtons() {
     button.classList.remove('active');
   });
 
-  const buttons = document.querySelectorAll('.rank-choice');
+  if (selectedPreviewRank === 'PLAYER') {
+    const playerButton = document.querySelector('.player-choice');
+    if (playerButton) playerButton.classList.add('active');
+    return;
+  }
+
+  const rankButtons = document.querySelectorAll('.rank-choice-row .rank-choice');
   const order = ['NOOB', 'PRINCE', 'KING', 'IMPERATOR'];
   const index = order.indexOf(selectedPreviewRank);
 
-  if (buttons[index]) {
-    buttons[index].classList.add('active');
+  if (rankButtons[index]) {
+    rankButtons[index].classList.add('active');
   }
 }
 
 function escapeHtml(text) {
   return text
-    .replaceAll('&', '&amp;')
+    .replaceAll('&', 'mp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
