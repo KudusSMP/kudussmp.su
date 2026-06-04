@@ -5,10 +5,22 @@ const RCON_PORT = Number(process.env.RCON_PORT || 25575);
 const RCON_PASSWORD = process.env.RCON_PASSWORD;
 
 const commands = {
-IMPERATOR: 'lp user {nick} parent set imperator',
+  IMPERATOR: 'lp user {nick} parent set imperator',
   KING: 'lp user {nick} parent set king',
   PRINCE: 'lp user {nick} parent set prince',
   NOOB: 'lp user {nick} parent set noob',
+
+  TITLE_PVP: 'lp user {nick} meta setsuffix 100 "&f[ПВП]"',
+  TITLE_BATYA: 'lp user {nick} meta setsuffix 100 "&f[Батя]"',
+  TITLE_CHSV: 'lp user {nick} meta setsuffix 100 "&f[ЧСВ!]"',
+  TITLE_MACE: 'lp user {nick} meta setsuffix 100 "&f[Mace]"',
+  TITLE_MYAU: 'lp user {nick} meta setsuffix 100 "&f[Мяу]"',
+  TITLE_KIS: 'lp user {nick} meta setsuffix 100 "&f[Кис]"',
+  TITLE_BDSM: 'lp user {nick} meta setsuffix 100 "&f[БДСМ]"',
+  TITLE_LOH: 'lp user {nick} meta setsuffix 100 "&f[Лох]"',
+  TITLE_JUDE: 'lp user {nick} meta setsuffix 100 "&f[JUDE]"',
+  TITLE_TRAP: 'lp user {nick} meta setsuffix 100 "&f[Трап]"',
+  TITLE_KEK: 'lp user {nick} meta setsuffix 100 "&f[Кек]"',
   TITLE_0IQ: 'lp user {nick} meta setsuffix 100 "&f[0iq]"'
 };
 
