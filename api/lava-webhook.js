@@ -5,6 +5,7 @@ const RCON_PORT = Number(process.env.RCON_PORT || 25575);
 const RCON_PASSWORD = process.env.RCON_PASSWORD;
 
 const commands = {
+  TITAN: 'lp user {nick} parent set titan',
   IMPERATOR: 'lp user {nick} parent set imperator',
   KING: 'lp user {nick} parent set king',
   PRINCE: 'lp user {nick} parent set prince',
