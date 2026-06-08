@@ -251,6 +251,41 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
  max-width:320px;
 }
 
+
+.titan-rank {
+  color:#b14cff;
+  font-weight:950;
+  text-shadow:0 0 10px rgba(177,76,255,.45);
+}
+.titan-link {
+  background: linear-gradient(135deg,#3E003E,#500050,#630063,#750075,#870087);
+  color:#fff;
+}
+
+
+.donate-carousel{
+  display:flex;
+  gap:24px;
+  overflow-x:auto;
+  padding:10px 4px 18px;
+  scroll-behavior:smooth;
+  position:relative;
+  z-index:1;
+}
+.donate-carousel::-webkit-scrollbar{height:8px;}
+.donate-carousel::-webkit-scrollbar-thumb{background:rgba(85,255,255,.35);border-radius:999px;}
+.donate-carousel .card{
+  flex:0 0 calc((100% - 72px)/4);
+  min-width:280px;
+  max-width:360px;
+}
+@media(max-width:1200px){
+  .donate-carousel .card{flex-basis:calc((100% - 24px)/2);}
+}
+@media(max-width:920px){
+  .donate-carousel .card{flex-basis:85%; min-width:260px;}
+}
+
 </style>
 </head>
 <body>
@@ -267,14 +302,34 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <div class="cta-row"><button class="btn secondary" onclick="openSocialModal()">Наши соцсети</button></div>
 </section>
 
-<section class="cards" id="donate">
+<section class="donate-carousel" id="donate">
+
+<article class="card titan">
+<img src="images/titan.png" alt="Titan привилегия">
+<div class="card-body">
+<div class="rank titan-rank">TITAN</div>
+<p>Самая мощная привилегия на сервере с доступом к киту Titan и Imperator.</p>
+<div class="price">999₽ <small>/ навсегда</small></div>
+<ul>
+<li>Префикс Titan</li>
+<li>Кит Titan раз в 7 дней</li>
+<li>Кит Imperator раз в 7 дней</li>
+<li>Все возможности Imperator</li>
+<li>Эксклюзивные команды</li>
+</ul>
+<button class="buy-link titan-link" onclick="openBuyModal('TITAN','999₽')">Купить Titan</button>
+<button class="kit-link" onclick="openKitModal('TITAN')">Посмотреть кит</button>
+</div>
+</article>
+
+
 <article class="card imperator featured">
 <img src="images/imperator.png" alt="Imperator привилегия">
 <div class="card-body">
 <div class="rank" style="color:#AA0000; text-shadow:0 0 10px #AA0000;">IMPERATOR</div>
 <p>Самая топовая привилегия с максимальными возможностями.</p>
 <div class="price">499₽ <small>/ навсегда</small></div>
-<ul><li>Префикс Imperator</li><li>Кит King раз в 5 дней</li><li>Кит Imperator раз в неделю</li><li>Крутые команды</li></ul>
+<ul><li>Префикс Imperator</li><li>Кит Imperator раз в неделю</li><li>Крутые команды</li></ul>
 <button class="buy-link imperator-link" onclick="openBuyModal('IMPERATOR','499₽')">Купить Imperator</button>
 <button class="kit-link imperator-kit" onclick="openKitModal('IMPERATOR')">Посмотреть кит</button>
 </div>
@@ -528,6 +583,13 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
       <button class="rank-choice mc-king" onclick="selectPreviewRank('KING')">King</button>
       <button class="rank-choice mc-imperator" onclick="selectPreviewRank('IMPERATOR')">Imperator</button>
     </div>
+    <div style="display:flex;justify-content:center;width:100%;margin-top:10px;">
+      <button class="rank-choice titan-rank" onclick="selectPreviewRank('TITAN')" style="width:calc(50% - 5px);max-width:240px;">
+        Titan
+      </button>
+    </div>
+    <div style="display:none;">
+    </div>
     <p>Выбери титул:</p>
     <div class="suffix-choice-row">
       <button class="suffix-choice suffix-darkred active" onclick="selectPreviewSuffix('ПВП','suffix-darkred', this)">ПВП</button>
@@ -579,6 +641,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 let selectedProduct = '';
 
 const productNames = {
+  TITAN: '<span style="background:linear-gradient(90deg,#3E003E,#500050,#630063,#750075,#870087);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:950;">TITAN</span>',
   IMPERATOR: '<span style="color:#AA0000">IMPERATOR</span>',
   KING: '<span style="color:#FFAA00">KING</span>',
   PRINCE: '<span style="color:#55FFFF">PRINCE</span>',
@@ -627,6 +690,10 @@ function goToPayment() {
 }
 
 const kits = {
+  TITAN: {
+    image: 'kits/titankit.png',
+    items: ['Кит Titan', 'Кит Imperator', 'Эксклюзивные предметы Titan']
+  },
   IMPERATOR: {
     image: 'kits/imperatorkit.png',
     items: ['Кит King раз в 5 дней', 'Кит Imperator раз в неделю', 'Уникальные предметы']
@@ -697,7 +764,8 @@ const previewRanks = {
   NOOB: { text: 'Noob', className: 'mc-noob' },
   PRINCE: { text: 'Prince', className: 'mc-prince' },
   KING: { text: 'King', className: 'mc-king' },
-  IMPERATOR: { text: 'Imperator', className: 'mc-imperator' }
+  IMPERATOR: { text: 'Imperator', className: 'mc-imperator' },
+  TITAN: { text: 'Titan', className: 'titan-rank' }
 };
 
 function openTitlePreview() {
@@ -732,6 +800,12 @@ function updatePreviewRankButtons() {
     return;
   }
 
+  if (selectedPreviewRank === 'TITAN') {
+    const titanButton = document.querySelector('.titan-rank.rank-choice');
+    if (titanButton) titanButton.classList.add('active');
+    return;
+  }
+
   const rankButtons = document.querySelectorAll('.rank-choice-row .rank-choice');
   const order = ['NOOB', 'PRINCE', 'KING', 'IMPERATOR'];
   const index = order.indexOf(selectedPreviewRank);
@@ -743,7 +817,7 @@ function updatePreviewRankButtons() {
 
 function escapeHtml(text) {
   return text
-    .replaceAll('&', 'mp;')
+    .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
