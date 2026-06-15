@@ -25,6 +25,20 @@ const commands = {
   TITLE_0IQ: 'lp user {nick} meta setsuffix 100 " &f0iq &f"'
 };
 
+function parseCustomFields(body) {
+  let customFields = body?.customFields;
+  if (!customFields) return null;
+  if (typeof customFields === 'string') {
+    try {
+      return JSON.parse(customFields);
+    } catch {
+      return null;
+    }
+  }
+  if (typeof customFields === 'object') return customFields;
+  return null;
+}
+
 export default async function handler(req, res) {
   try {
 if (req.method === 'GET') {
@@ -60,26 +74,31 @@ if (req.method === 'GET') {
       return res.status(200).send('payment not completed');
     }
 
-    let customFields = body.customFields;
-
-    if (typeof customFields === 'string') {
-      customFields = JSON.parse(customFields);
-    }
-
+    const customFields = parseCustomFields(body);
     const product = customFields?.product;
     const nick = customFields?.nick;
+    const tokens = Number(customFields?.tokens || 0);
 
     if (!product || !nick) {
       return res.status(400).send('Нет product или nick');
     }
 
-    const commandTemplate = commands[product];
+    let command = '';
 
-    if (!commandTemplate) {
-      return res.status(400).send('Неизвестный товар');
+    if (product === 'TOKENS_CUSTOM') {
+      // Give SMP-coins via plugin command
+      const toGive = Math.max(150, Math.floor(tokens || 0));
+      if (!toGive) {
+        return res.status(400).send('Не указано количество токенов');
+      }
+      command = `ktoken give ${nick} ${toGive}`;
+    } else {
+      const commandTemplate = commands[product];
+      if (!commandTemplate) {
+        return res.status(400).send('Неизвестный товар');
+      }
+      command = commandTemplate.replace('{nick}', nick);
     }
-
-    const command = commandTemplate.replace('{nick}', nick);
 
     const rcon = await Rcon.connect({
       host: RCON_HOST,
@@ -90,7 +109,11 @@ if (req.method === 'GET') {
     await rcon.send(command);
     await rcon.end();
 
-    console.log(`Выдан донат: ${product} игроку ${nick}`);
+    console.log(
+      product === 'TOKENS_CUSTOM'
+        ? `Выданы SMP-коины: ${tokens} игроку ${nick}`
+        : `Выдан донат: ${product} игроку ${nick}`,
+    );
 
     return res.status(200).send('ok');
   } catch (error) {
