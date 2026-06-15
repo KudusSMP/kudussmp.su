@@ -39,13 +39,38 @@ export default async function handler(req, res) {
     return res.status(400).send('Не указан товар или ник');
   }
 
-  const amount = prices[product];
+  let amount = prices[product];
+
+  // Custom SMP-coins purchase (10 coins = 1 rub), min 15 rub.
+  if (product === 'TOKENS_CUSTOM') {
+    const rub = Math.floor(Number(req.query.rub || 0));
+    const tokens = Math.floor(Number(req.query.tokens || 0));
+
+    // Prefer rub from query; fallback to tokens.
+    if (rub && rub > 0) {
+      amount = rub;
+    } else if (tokens && tokens > 0) {
+      amount = Math.ceil(tokens / 10);
+    } else {
+      return res.status(400).send('Не указана сумма');
+    }
+
+    if (amount < 15) {
+      return res.status(400).send('Минимальная сумма — 15₽');
+    }
+  }
 
   if (!amount) {
     return res.status(400).send('Неизвестный товар');
   }
 
   const orderId = `${product}-${nick}-${Date.now()}`;
+
+  // Pass tokens to webhook via customFields when purchasing SMP-coins.
+  const tokensForWebhook =
+    product === 'TOKENS_CUSTOM'
+      ? String(Math.max(150, Math.floor(amount) * 10))
+      : undefined;
 
   const body = {
     sum: amount,
@@ -54,8 +79,11 @@ export default async function handler(req, res) {
     hookUrl: `${SITE_URL}/api/lava-webhook`,
     successUrl: SITE_URL,
     failUrl: SITE_URL,
-    comment: `KudusSMP: ${product}, ник: ${nick}`,
-    customFields: JSON.stringify({ product, nick })
+    comment:
+      product === 'TOKENS_CUSTOM'
+        ? `KudusSMP: SMP-коины, ник: ${nick}`
+        : `KudusSMP: ${product}, ник: ${nick}`,
+    customFields: JSON.stringify({ product, nick, tokens: tokensForWebhook })
   };
 
   const jsonString = JSON.stringify(body);
