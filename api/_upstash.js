@@ -7,38 +7,33 @@ function assertEnv() {
   }
 }
 
-async function upstash(cmd, ...args) {
+async function pipeline(commands) {
   assertEnv();
-  const payload = { command: [cmd, ...args] };
   const r = await fetch(`${UPSTASH_REDIS_REST_URL}/pipeline`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify([payload]),
+    // ВАЖНО: Upstash ждёт массив массивов команд
+    body: JSON.stringify(commands),
   });
 
   const data = await r.json();
-  if (!r.ok) throw new Error(`Upstash error ${r.status}: ${JSON.stringify(data)}`);
-  return data?.[0]?.result;
+  if (!r.ok) {
+    throw new Error(`Upstash error ${r.status}: ${JSON.stringify(data)}`);
+  }
+  return data;
+}
+
+async function upstash(cmd, ...args) {
+  const out = await pipeline([[cmd, ...args]]);
+  return out?.[0]?.result;
 }
 
 async function upstashPipeline(commands) {
-  assertEnv();
-  const payload = commands.map((c) => ({ command: c }));
-  const r = await fetch(`${UPSTASH_REDIS_REST_URL}/pipeline`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  const data = await r.json();
-  if (!r.ok) throw new Error(`Upstash error ${r.status}: ${JSON.stringify(data)}`);
-  return data.map((x) => x.result);
+  const out = await pipeline(commands);
+  return out.map((x) => x.result);
 }
 
 export { upstash, upstashPipeline };
