@@ -36,8 +36,46 @@ h1 span { background:linear-gradient(90deg,#fff,#7ff0ff,#ffc54d); -webkit-backgr
 .card-body { padding:24px; display:flex; flex-direction:column; flex:1; }
 .rank { font-weight:900; font-size:32px; margin-bottom:10px; }
 .card-body p { min-height:54px; color:rgba(255,255,255,.78); line-height:1.45; margin-bottom:12px; }
-.price { font-size:28px; font-weight:950; margin-bottom:16px; }
+.price { font-size:28px; font-weight:950; margin-bottom:16px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
 .price small { font-size:14px; color:rgba(255,255,255,.58); font-weight:700; }
+.old-price {
+  position:relative;
+  color:rgba(255,255,255,.42);
+  font-size:22px;
+  font-weight:900;
+}
+.old-price::after {
+  content:"";
+  position:absolute;
+  left:-4px;
+  right:-4px;
+  top:50%;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ff5555,#ffaa00);
+  transform:translateY(-50%) rotate(-8deg);
+  box-shadow:0 0 14px rgba(255,85,85,.35);
+}
+.new-price {
+  color:#55FF55;
+  font-size:32px;
+  font-weight:950;
+  text-shadow:0 0 16px rgba(85,255,85,.28);
+}
+.sale-badge {
+  align-self:flex-start;
+  margin-bottom:12px;
+  padding:7px 11px;
+  border-radius:999px;
+  color:#111;
+  background:linear-gradient(135deg,#55FF55,#55FFFF,#FFAA00);
+  background-size:220% 220%;
+  animation:buttonFlow 3s ease infinite;
+  font-size:13px;
+  font-weight:950;
+  letter-spacing:.3px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
 ul { list-style:none; margin-bottom:22px; color:rgba(255,255,255,.75); line-height:1.9; flex:1; }
 li::before { content:"✓ "; color:#55FFFF; font-weight:900; }
 .buy-link { margin-top:auto; display:block; width:100%; border:0; border-radius:16px; padding:15px; cursor:pointer; font-weight:950; font-size:18px; text-align:center; text-decoration:none; transition:.25s ease; background-size:220% 220%; animation: buttonFlow 3s ease infinite; }
@@ -336,9 +374,10 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <article class="card titan">
 <img src="images/titan.png" alt="Titan привилегия">
 <div class="card-body">
+<div class="sale-badge">🔥 Цена снижена</div>
 <div class="rank titan-rank">TITAN</div>
 <p>Самая мощная привилегия на сервере с доступом к киту Titan и Imperator.</p>
-<div class="price">999₽ <small>/ навсегда</small></div>
+<div class="price"><span class="old-price">999₽</span><span class="new-price">799₽</span> <small>/ навсегда</small></div>
 <ul>
 <li>Префикс Titan</li>
 <li>Кит Titan раз неделю</li>
@@ -346,7 +385,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <li>Все возможности Imperator</li>
 <li>Эксклюзивные команды</li>
 </ul>
-<button class="buy-link titan-link" onclick="openBuyModal('TITAN','999₽')">Купить Titan</button>
+<button class="buy-link titan-link" onclick="openBuyModal('TITAN','799₽')">Купить Titan</button>
 <button class="kit-link" onclick="openKitModal('TITAN')">Посмотреть кит</button>
 </div>
 </article>
@@ -355,11 +394,12 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <article class="card imperator featured">
 <img src="images/imperator.png" alt="Imperator привилегия">
 <div class="card-body">
+<div class="sale-badge">🔥 Цена снижена</div>
 <div class="rank" style="color:#AA0000; text-shadow:0 0 10px #AA0000;">IMPERATOR</div>
 <p>Самая топовая привилегия с максимальными возможностями.</p>
-<div class="price">499₽ <small>/ навсегда</small></div>
+<div class="price"><span class="old-price">499₽</span><span class="new-price">399₽</span> <small>/ навсегда</small></div>
 <ul><li>Префикс Imperator</li><li>Кит Imperator раз в неделю</li><li>Крутые команды</li></ul>
-<button class="buy-link imperator-link" onclick="openBuyModal('IMPERATOR','499₽')">Купить Imperator</button>
+<button class="buy-link imperator-link" onclick="openBuyModal('IMPERATOR','399₽')">Купить Imperator</button>
 <button class="kit-link imperator-kit" onclick="openKitModal('IMPERATOR')">Посмотреть кит</button>
 </div>
 </article>
@@ -367,11 +407,12 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <article class="card king">
 <img src="images/king.png" alt="King привилегия">
 <div class="card-body">
+<div class="sale-badge">🔥 Цена снижена</div>
 <div class="rank" style="color:#FFAA00; text-shadow:0 0 10px #FFAA00;">KING</div>
 <p>Максимальная привилегия для настоящего короля сервера.</p>
-<div class="price">199₽ <small>/ навсегда</small></div>
+<div class="price"><span class="old-price">199₽</span><span class="new-price">149₽</span> <small>/ навсегда</small></div>
 <ul><li>Лучшие команды</li><li>Уникальный префикс King</li><li>Кит раз в 5 дней</li></ul>
-<button class="buy-link king-link" onclick="openBuyModal('KING','199₽')">Купить King</button>
+<button class="buy-link king-link" onclick="openBuyModal('KING','149₽')">Купить King</button>
 <button class="kit-link king-kit" onclick="openKitModal('KING')">Посмотреть кит</button>
 </div>
 </article>
@@ -379,11 +420,12 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <article class="card prince">
 <img src="images/prince.png" alt="Prince привилегия">
 <div class="card-body">
+<div class="sale-badge">🔥 Цена снижена</div>
 <div class="rank" style="color:#55FFFF; text-shadow:0 0 10px #55FFFF;">PRINCE</div>
 <p>Сильный ранг для комфортной игры и быстрого старта.</p>
-<div class="price">99₽ <small>/ навсегда</small></div>
+<div class="price"><span class="old-price">99₽</span><span class="new-price">79₽</span> <small>/ навсегда</small></div>
 <ul><li>Красивый префикс Prince</li><li>Полезные команды</li><li>Кит раз в 3 дня</li></ul>
-<button class="buy-link prince-link" onclick="openBuyModal('PRINCE','99₽')">Купить Prince</button>
+<button class="buy-link prince-link" onclick="openBuyModal('PRINCE','79₽')">Купить Prince</button>
 <button class="kit-link prince-kit" onclick="openKitModal('PRINCE')">Посмотреть кит</button>
 </div>
 </article>
@@ -391,11 +433,12 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 <article class="card noob">
 <img src="images/noob.png" alt="Noob привилегия">
 <div class="card-body">
+<div class="sale-badge">🔥 Цена снижена</div>
 <div class="rank" style="color:#555555; text-shadow:0 0 8px #000000; letter-spacing:1px;">NOOB</div>
 <p>Недорогая привилегия для новичков, которые хотят выделиться.</p>
-<div class="price">49₽ <small>/ навсегда</small></div>
+<div class="price"><span class="old-price">49₽</span><span class="new-price">39₽</span> <small>/ навсегда</small></div>
 <ul><li>Префикс Noob</li><li>Кит раз в 1.5 дня</li><li>Базовые бонусы</li></ul>
-<button class="buy-link noob-link" onclick="openBuyModal('NOOB','49₽')">Купить Noob</button>
+<button class="buy-link noob-link" onclick="openBuyModal('NOOB','39₽')">Купить Noob</button>
 <button class="kit-link noob-kit" onclick="openKitModal('NOOB')">Посмотреть кит</button>
 </div>
 </article>
