@@ -62,6 +62,13 @@ li::before { content:"✓ "; color:#55FFFF; font-weight:900; }
 .buy-modal p { color:rgba(255,255,255,.7); line-height:1.5; margin-bottom:18px; }
 .buy-modal input { width:100%; padding:16px 18px; border-radius:16px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.08); color:#fff; font-size:17px; outline:none; margin-bottom:14px; }
 .buy-modal input:focus { border-color:#55FFFF; box-shadow:0 0 20px rgba(85,255,255,.18); }
+.buy-modal .amount-row { display:none; }
+.buy-modal .amount-row.active { display:block; }
+.amount-hint { color:rgba(255,255,255,.7); font-size:14px; line-height:1.4; margin:-6px 0 14px; }
+.amount-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 0 10px; }
+.amount-grid input { margin-bottom:0; }
+.amount-label { display:block; font-size:13px; font-weight:900; letter-spacing:.3px; color:rgba(255,255,255,.7); margin:0 0 8px; }
+.amount-readonly { opacity:.92; }
 .kit-image { width:100%; border-radius:16px; margin:12px 0 16px; display:block; background:rgba(255,255,255,.06); }
 .kit-list { color:rgba(255,255,255,.82); line-height:1.8; margin-bottom:18px; }
 .modal-actions { display:flex; gap:12px; }
@@ -286,6 +293,28 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
   .donate-carousel .card{flex-basis:85%; min-width:260px;}
 }
 
+.tokens-cta {
+  margin-top:18px;
+  display:flex;
+  justify-content:center;
+}
+.tokens-cta button {
+  width:min(760px, 100%);
+  padding:18px 22px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.18);
+  cursor:pointer;
+  font-weight:950;
+  font-size:18px;
+  color:#111;
+  background: linear-gradient(135deg, rgba(85,255,85,1), rgba(85,255,255,1), rgba(255,170,0,1));
+  background-size:220% 220%;
+  animation: buttonFlow 3s ease infinite;
+  box-shadow:0 24px 70px rgba(0,0,0,.45);
+}
+.tokens-cta button:hover { transform:translateY(-3px) scale(1.01); filter:brightness(1.08); }
+.tokens-cta small { display:block; margin-top:6px; font-weight:800; font-size:13px; color:rgba(17,17,17,.8); }
+
 </style>
 </head>
 <body>
@@ -371,6 +400,13 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 </div>
 </article>
 </section>
+
+<div class="tokens-cta">
+  <button type="button" onclick="openBuyModal('TOKENS_CUSTOM','от 15₽')">
+    Купить SMP-коины
+    <small>от 15₽ • 10 SMP-коинов = 1₽</small>
+  </button>
+</div>
 
 <section class="rules" id="titles">
 <div style="display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:18px;">
@@ -546,6 +582,20 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
     <h2 id="modalTitle">Покупка привилегии</h2>
     <p id="modalText">Введите игровой ник, чтобы мы знали, кому выдать привилегию.</p>
     <input id="minecraftNick" type="text" placeholder="Ваш Minecraft ник" maxlength="20">
+
+    <div class="amount-row" id="tokenAmountRow">
+      <div class="amount-grid">
+        <div>
+          <span class="amount-label">Сумма в рублях (мин. 15)</span>
+          <input id="tokenRub" type="number" min="15" step="1" inputmode="numeric" placeholder="Например, 15">
+        </div>
+        <div>
+          <span class="amount-label">Кол-во SMP-коинов</span>
+          <input class="amount-readonly" id="tokenCoins" type="number" min="150" step="10" inputmode="numeric" placeholder="150" readonly>
+        </div>
+      </div>
+      <div class="amount-hint" id="tokenAmountHint">Курс: 10 SMP-коинов = 1₽</div>
+    </div>
     <div class="modal-actions">
       <button class="modal-close" onclick="closeBuyModal()">Отмена</button>
       <button class="modal-buy" onclick="goToPayment()">Перейти к оплате</button>
@@ -639,6 +689,7 @@ footer { padding:32px 7vw; background:#060606; color:rgba(255,255,255,.55); text
 
 <script>
 let selectedProduct = '';
+let isSyncingTokenFields = false;
 
 const productNames = {
   TITAN: '<span style="background:linear-gradient(90deg,#3E003E,#500050,#630063,#750075,#870087);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:950;">TITAN</span>',
@@ -646,6 +697,11 @@ const productNames = {
   KING: '<span style="color:#FFAA00">KING</span>',
   PRINCE: '<span style="color:#55FFFF">PRINCE</span>',
   NOOB: '<span style="color:#555555">NOOB</span>',
+
+  TOKENS_100: '<span style="color:#55FFFF">SMP-коины × 100</span>',
+  TOKENS_250: '<span style="color:#FFAA00">SMP-коины × 250</span>',
+  TOKENS_600: '<span style="color:#AA0000">SMP-коины × 600</span>',
+  TOKENS_CUSTOM: '<span style="color:#55FF55">SMP-коины</span>',
 
   TITLE_PVP: '<span style="color:#AA0000">ПВП</span>',
   TITLE_BATYA: '<span style="color:#AA0000">Батя</span>',
@@ -672,9 +728,52 @@ function openBuyModal(product, price) {
     'Стоимость: ' + price + '. Введите игровой ник для выдачи.';
 
   document.getElementById('minecraftNick').value = '';
+
+  // Custom tokens: show amount inputs
+  const amountRow = document.getElementById('tokenAmountRow');
+  if (product === 'TOKENS_CUSTOM') {
+    amountRow.classList.add('active');
+
+    // Default to minimum
+    document.getElementById('tokenRub').value = '15';
+    document.getElementById('tokenCoins').value = '150';
+  } else {
+    amountRow.classList.remove('active');
+  }
+
   document.getElementById('buyModal').classList.add('active');
   setTimeout(() => document.getElementById('minecraftNick').focus(), 100);
 }
+
+function syncTokensFromRub() {
+  if (isSyncingTokenFields) return;
+  isSyncingTokenFields = true;
+  const rubInput = document.getElementById('tokenRub');
+  const coinsInput = document.getElementById('tokenCoins');
+  const rub = Math.max(0, Math.floor(Number(rubInput.value || 0)));
+  coinsInput.value = String(rub * 10);
+  isSyncingTokenFields = false;
+}
+
+function syncRubFromTokens() {
+  if (isSyncingTokenFields) return;
+  isSyncingTokenFields = true;
+  const rubInput = document.getElementById('tokenRub');
+  const coinsInput = document.getElementById('tokenCoins');
+  const coins = Math.max(0, Math.floor(Number(coinsInput.value || 0)));
+  const rub = Math.ceil(coins / 10);
+  rubInput.value = String(rub);
+  coinsInput.value = String(rub * 10);
+  isSyncingTokenFields = false;
+}
+
+// Live update: when user types rubles, show coins immediately
+document.addEventListener('input', function (e) {
+  if (selectedProduct !== 'TOKENS_CUSTOM') return;
+  const t = e.target;
+  if (!t) return;
+  if (t.id === 'tokenRub') syncTokensFromRub();
+});
 
 function closeBuyModal() {
   document.getElementById('buyModal').classList.remove('active');
@@ -686,6 +785,23 @@ function goToPayment() {
     alert('Введите игровой ник');
     return;
   }
+
+  // Tokens custom amount
+  if (selectedProduct === 'TOKENS_CUSTOM') {
+    const rub = Math.floor(Number(document.getElementById('tokenRub').value || 0));
+    if (!rub || rub < 15) {
+      alert('Минимальная покупка — 15₽');
+      return;
+    }
+    const tokens = rub * 10;
+
+    window.location.href = '/api/pay?product=' + encodeURIComponent(selectedProduct)
+      + '&nick=' + encodeURIComponent(nick)
+      + '&rub=' + encodeURIComponent(String(rub))
+      + '&tokens=' + encodeURIComponent(String(tokens));
+    return;
+  }
+
   window.location.href = '/api/pay?product=' + encodeURIComponent(selectedProduct) + '&nick=' + encodeURIComponent(nick);
 }
 
