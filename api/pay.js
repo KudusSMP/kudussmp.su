@@ -5,11 +5,11 @@ const SECRET_KEY = process.env.LAVA_SECRET_KEY;
 const SITE_URL = 'https://kudussmp.su';
 
 const prices = {
-  TITAN: 999,
-  IMPERATOR: 499,
-  KING: 199,
-  PRINCE: 99,
-  NOOB: 49,
+  TITAN: 799,
+  IMPERATOR: 399,
+  KING: 149,
+  PRINCE: 79,
+  NOOB: 39,
 
   TITLE_PVP: 49,
   TITLE_BATYA: 69,
