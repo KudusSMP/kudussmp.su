@@ -1,1 +1,684 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KudusSMP — привилегии и SMP-коины</title>
+<style>
 
+* { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body { font-family: Inter, Arial, sans-serif; color:#fff; background:#090909; overflow-x:hidden; }
+button,input { font-family: inherit; }
+.hero { min-height:100vh; padding:28px 7vw 70px; background:
+  radial-gradient(circle at 15% 20%, rgba(255,112,24,.24), transparent 35%),
+  radial-gradient(circle at 90% 10%, rgba(47,220,255,.22), transparent 30%),
+  linear-gradient(135deg, #070707 0%, #151515 52%, #2a0d07 100%);
+  position:relative;
+}
+header,.hero-content,.cards,.rules,footer,.tokens-cta,.donate-carousel { position:relative; z-index:1; }
+header { display:flex; justify-content:space-between; align-items:center; gap:20px; margin-bottom:74px; }
+.logo { display:flex; align-items:center; gap:12px; font-weight:900; letter-spacing:.5px; font-size:22px; }
+.cube { width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,#29e3ff,#ffb52e); box-shadow:0 0 35px rgba(41,227,255,.35); }
+nav a { color: rgba(255,255,255,.78); text-decoration:none; margin-left:24px; font-weight:700; transition:.25s ease; }
+nav a:hover { color:#55FFFF; }
+.hero-content { max-width:900px; margin-bottom:46px; }
+h1 { font-size: clamp(44px, 8vw, 92px); line-height:.92; letter-spacing:-4px; margin-bottom:24px; }
+h1 span { background:linear-gradient(90deg,#fff,#7ff0ff,#ffc54d); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.subtitle { max-width:650px; color:rgba(255,255,255,.75); font-size:20px; line-height:1.6; margin-bottom:30px; }
+.section-title { margin:48px 0 18px; font-size:30px; }
+.donate-carousel{ display:flex; gap:24px; overflow-x:auto; padding:10px 4px 18px; scroll-behavior:smooth; position:relative; z-index:1; }
+.donate-carousel::-webkit-scrollbar{height:8px;}
+.donate-carousel::-webkit-scrollbar-thumb{background:rgba(85,255,255,.35);border-radius:999px;}
+.donate-carousel .card{ flex:0 0 calc((100% - 72px)/4); min-width:280px; max-width:360px; }
+.card { display:flex; flex-direction:column; background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.13); border-radius:28px; overflow:hidden; box-shadow:0 24px 80px rgba(0,0,0,.35); backdrop-filter: blur(18px); transition:.3s ease; position:relative; min-height:610px; will-change: transform, box-shadow, border-color; }
+.card::after { content:""; position:absolute; inset:0; pointer-events:none; opacity:0; background:linear-gradient(135deg, rgba(85,255,255,.10), rgba(255,170,0,.08)); transition:.35s ease; }
+.card:hover { transform:translateY(-10px) scale(1.015); border-color: rgba(255,255,255,.22); box-shadow:0 34px 100px rgba(0,0,0,.48), 0 0 30px rgba(85,255,255,.08); }
+.card:hover::after { opacity:1; }
+.card img { width:100%; height:260px; object-fit:cover; display:block; background: rgba(255,255,255,.06); }
+.card-body { padding:24px; display:flex; flex-direction:column; flex:1; }
+.rank { font-weight:900; font-size:32px; margin-bottom:10px; }
+.card-body p { min-height:54px; color:rgba(255,255,255,.78); line-height:1.45; margin-bottom:12px; }
+.price { font-size:32px; font-weight:950; margin-bottom:16px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; color:#55FF55; text-shadow:0 0 16px rgba(85,255,85,.24); }
+.price small { font-size:14px; color:rgba(255,255,255,.58); font-weight:700; text-shadow:none; }
+ul { list-style:none; margin-bottom:22px; color:rgba(255,255,255,.75); line-height:1.9; flex:1; }
+li::before { content:"✓ "; color:#55FFFF; font-weight:900; }
+.buy-link { margin-top:auto; display:block; width:100%; border:0; border-radius:16px; padding:15px; cursor:pointer; font-weight:950; font-size:18px; text-align:center; text-decoration:none; transition:.25s ease; background-size:220% 220%; animation: buttonFlow 3s ease infinite; }
+.buy-link:hover { transform:translateY(-4px) scale(1.03); filter:brightness(1.15); }
+.imperator-link { background: linear-gradient(135deg,#AA0000,#ff3333,#AA0000); color:#fff; }
+.king-link { background: linear-gradient(135deg,#FFAA00,#ffd65c,#FFAA00); color:#111; }
+.prince-link { background: linear-gradient(135deg,#55FFFF,#ffffff,#55FFFF); color:#111; }
+.noob-link { background: linear-gradient(135deg,#555555,#888888,#555555); color:#fff; }
+.titan-rank { color:#b14cff; font-weight:950; text-shadow:0 0 10px rgba(177,76,255,.45); }
+.titan-link { background: linear-gradient(135deg,#3E003E,#500050,#630063,#750075,#870087); color:#fff; }
+
+.card select { width:100%; padding:13px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.14); background:rgba(20,20,20,.9); color:#fff; font-size:15px; margin-bottom:14px; cursor:pointer; }
+.card select:focus { outline:none; border-color:#55FFFF; }
+
+.kit-link { margin-top:12px; width:100%; border:0; border-radius:16px; padding:13px; font-weight:900; font-size:16px; cursor:pointer; background:rgba(85,255,255,.2); color:#fff; border:1px solid rgba(255,255,255,.16); transition:.25s ease; }
+.kit-link:hover { background:rgba(85,255,255,.35); transform:translateY(-2px); }
+.kit-image { width:100%; border-radius:16px; margin:12px 0 16px; display:block; background:rgba(255,255,255,.06); }
+.kit-list { color:rgba(255,255,255,.82); line-height:1.8; margin-bottom:18px; }
+
+.suffix-darkred { color:#AA0000; }
+.suffix-pink-bold { color:#FF55FF; font-weight:950; }
+.suffix-aqua { color:#55FFFF; }
+.suffix-yellow { color:#FFFF55; }
+.suffix-darkblue { color:#0000AA; }
+.suffix-red { color:#FF5555; }
+.suffix-green-bold { color:#55FF55; font-weight:950; }
+.suffix-white { color:#FFFFFF; }
+
+.title-carousel{ display:flex; gap:20px; overflow-x:auto; padding:10px 4px 16px; scroll-behavior:smooth; }
+.title-carousel::-webkit-scrollbar{height:8px;}
+.title-carousel::-webkit-scrollbar-thumb{background:rgba(85,255,255,.35);border-radius:999px;}
+.title-card { min-height:190px; }
+.title-card .card-body { justify-content:flex-start; padding:22px; }
+.title-carousel .title-card{ flex:0 0 calc((100% - 60px)/4); min-width:220px; max-width:280px; }
+@media(max-width:1200px){ .title-carousel .title-card{flex-basis:calc((100% - 20px)/2);} }
+@media(max-width:920px){ .title-carousel .title-card{flex-basis:85%; min-width:200px;} }
+
+.tokens-cta { margin:18px 0 34px; display:flex; justify-content:center; }
+.tokens-cta button { width:min(760px, 100%); padding:18px 22px; border-radius:18px; border:1px solid rgba(255,255,255,.18); cursor:pointer; font-weight:950; font-size:18px; color:#111; background: linear-gradient(135deg, rgba(85,255,85,1), rgba(85,255,255,1), rgba(255,170,0,1)); background-size:220% 220%; animation: buttonFlow 3s ease infinite; box-shadow:0 24px 70px rgba(0,0,0,.45); }
+.tokens-cta button:hover { transform:translateY(-3px) scale(1.01); filter:brightness(1.08); }
+.tokens-cta small { display:block; margin-top:6px; font-weight:800; font-size:13px; color:rgba(17,17,17,.8); }
+.rules { margin-top:40px; padding:30px; border-radius:20px; background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.1); }
+.rules h2 { color:#fff; margin-bottom:12px; }
+.rules pre { white-space:pre-wrap; font-family:inherit; color:rgba(255,255,255,.8); line-height:1.6; }
+.modal-overlay { position:fixed; inset:0; z-index:99; display:none; align-items:center; justify-content:center; padding:20px; background: rgba(0,0,0,.72); backdrop-filter: blur(10px); }
+.modal-overlay.active { display:flex; }
+.buy-modal { width:min(520px,100%); max-height:90vh; overflow:auto; border-radius:28px; padding:28px; background: linear-gradient(145deg, rgba(24,24,24,.96), rgba(8,8,8,.96)); border:1px solid rgba(255,255,255,.14); box-shadow:0 30px 100px rgba(0,0,0,.65); }
+.buy-modal h2 { font-size:30px; margin-bottom:10px; }
+.buy-modal p { color:rgba(255,255,255,.7); line-height:1.5; margin-bottom:18px; }
+.buy-modal input { width:100%; padding:16px 18px; border-radius:16px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.08); color:#fff; font-size:17px; outline:none; margin-bottom:14px; }
+.buy-modal input:focus { border-color:#55FFFF; box-shadow:0 0 20px rgba(85,255,255,.18); }
+.buy-modal .amount-row { display:none; }
+.buy-modal .amount-row.active { display:block; }
+.amount-hint { color:rgba(255,255,255,.7); font-size:14px; line-height:1.4; margin:-6px 0 14px; }
+.amount-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 0 10px; }
+.amount-grid input { margin-bottom:0; }
+.amount-label { display:block; font-size:13px; font-weight:900; letter-spacing:.3px; color:rgba(255,255,255,.7); margin:0 0 8px; }
+.amount-readonly { opacity:.92; }
+.agree-row { display:flex; align-items:flex-start; gap:10px; margin:2px 0 16px; color:rgba(255,255,255,.74); font-size:13px; line-height:1.4; }
+.agree-row input { width:auto; margin:2px 0 0; accent-color:#55FFFF; }
+.agree-row a { color:#55FFFF; text-decoration:none; font-weight:900; }
+.agree-row a:hover { text-decoration:underline; }
+.modal-actions { display:flex; gap:12px; }
+.modal-buy,.modal-close { flex:1; border:0; border-radius:16px; padding:15px; font-weight:950; cursor:pointer; transition:.25s ease; }
+.modal-buy { color:#111; background: linear-gradient(135deg,#55FFFF,#FFAA00); }
+.modal-close { color:#fff; background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); }
+.modal-buy:hover,.modal-close:hover { transform:translateY(-2px); }
+
+.payment-note {
+  margin:2px 0 14px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(85,255,255,.10);
+  border:1px solid rgba(85,255,255,.16);
+  color:rgba(255,255,255,.78);
+  line-height:1.45;
+  font-size:13px;
+}
+.site-footer {
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1.35fr auto 1fr;
+  gap:34px;
+  align-items:center;
+  padding:30px 7vw 34px;
+  background:
+    radial-gradient(circle at 25% 40%, rgba(129,37,75,.18), transparent 38%),
+    linear-gradient(135deg, #070707 0%, #10090d 56%, #060606 100%);
+  border-top:1px solid rgba(255,255,255,.08);
+  color:rgba(255,255,255,.72);
+  text-align:left;
+}
+.site-footer p { margin:3px 0; line-height:1.28; font-size:14px; font-weight:800; }
+.footer-links { margin-top:7px!important; font-weight:900!important; }
+.footer-links a { color:#7c3cff; text-decoration:none; }
+.footer-links a:hover { color:#55FFFF; text-decoration:underline; }
+.payment-center { display:flex; align-items:center; justify-content:center; min-width:220px; }
+.lava-logo-link {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 16px 40px rgba(0,0,0,.22);
+  transition:.25s ease;
+}
+.lava-logo-link:hover { transform:translateY(-2px); background:rgba(255,255,255,.12); }
+.lava-logo {
+  display:block;
+  width:150px;
+  height:auto;
+  max-height:44px;
+  object-fit:contain;
+}
+.footer-right { text-align:left; color:rgba(255,255,255,.42); font-size:15px; font-weight:900; }
+.footer-right p { font-size:15px; }
+@media(max-width:980px){
+  .site-footer{grid-template-columns:1fr; gap:22px;}
+  .payment-center{justify-content:flex-start; min-width:0;}
+  .footer-right{text-align:left;}
+}
+
+@keyframes buttonFlow { 0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%} }
+@media(max-width:1200px){ .donate-carousel .card{flex-basis:calc((100% - 24px)/2);} }
+@media(max-width:920px){ nav{display:none;} h1{letter-spacing:-2px;} .donate-carousel .card{flex-basis:85%; min-width:260px;} .amount-grid{grid-template-columns:1fr;} .modal-actions{flex-direction:column;} }
+
+</style>
+</head>
+<body>
+
+<main class="hero">
+<header>
+  <div class="logo"><div class="cube"></div>KudusSMP</div>
+  <nav>
+    <a href="#donate">Привилегии</a>
+    <a href="#services">Услуги</a>
+    <a href="#rules">Правила</a>
+  </nav>
+</header>
+
+<section class="hero-content">
+  <h1>Покупка на <span>KudusSMP</span></h1>
+  <p class="subtitle">Выбери привилегию или купи SMP-коины, введи Minecraft-ник и перейди к оплате. IP сервера: play.KudusSMP.su</p>
+</section>
+
+<h2 class="section-title" id="donate">Привилегии</h2>
+<section class="donate-carousel">
+
+<article class="card titan">
+<img src="images/titan.png" alt="Titan привилегия">
+<div class="card-body">
+<div class="rank titan-rank">TITAN</div>
+<p>Самая мощная привилегия на сервере с доступом к возможностям Titan и Imperator.</p>
+<div class="price"><span>999₽</span> <small>/ навсегда</small></div>
+<ul>
+<li>Префикс Titan</li>
+<li>Кит Titan раз в неделю</li>
+<li>Кит Imperator раз в неделю</li>
+<li>Все возможности Imperator</li>
+<li>Эксклюзивные команды</li>
+</ul>
+<button class="buy-link titan-link" onclick="openBuyModal('TITAN','999₽')">Купить Titan</button>
+<button class="kit-link" onclick="openKitModal('TITAN')">Посмотреть кит</button>
+</div>
+</article>
+
+<article class="card imperator featured">
+<img src="images/imperator.png" alt="Imperator привилегия">
+<div class="card-body">
+<div class="rank" style="color:#AA0000; text-shadow:0 0 10px #AA0000;">IMPERATOR</div>
+<p>Топовая привилегия с расширенными возможностями для игры на сервере.</p>
+<div class="price"><span>499₽</span> <small>/ навсегда</small></div>
+<ul>
+<li>Префикс Imperator</li>
+<li>Кит Imperator раз в неделю</li>
+<li>Крутые команды</li>
+</ul>
+<button class="buy-link imperator-link" onclick="openBuyModal('IMPERATOR','499₽')">Купить Imperator</button>
+<button class="kit-link" onclick="openKitModal('IMPERATOR')">Посмотреть кит</button>
+</div>
+</article>
+
+<article class="card king">
+<img src="images/king.png" alt="King привилегия">
+<div class="card-body">
+<div class="rank" style="color:#FFAA00; text-shadow:0 0 10px #FFAA00;">KING</div>
+<p>Сильная привилегия для комфортной игры и заметного статуса на сервере.</p>
+<div class="price"><span>199₽</span> <small>/ навсегда</small></div>
+<ul>
+<li>Лучшие команды</li>
+<li>Уникальный префикс King</li>
+<li>Кит раз в 5 дней</li>
+</ul>
+<button class="buy-link king-link" onclick="openBuyModal('KING','199₽')">Купить King</button>
+<button class="kit-link" onclick="openKitModal('KING')">Посмотреть кит</button>
+</div>
+</article>
+
+<article class="card prince">
+<img src="images/prince.png" alt="Prince привилегия">
+<div class="card-body">
+<div class="rank" style="color:#55FFFF; text-shadow:0 0 10px #55FFFF;">PRINCE</div>
+<p>Привилегия для быстрого старта и более удобной игры.</p>
+<div class="price"><span>99₽</span> <small>/ навсегда</small></div>
+<ul>
+<li>Красивый префикс Prince</li>
+<li>Полезные команды</li>
+<li>Кит раз в 3 дня</li>
+</ul>
+<button class="buy-link prince-link" onclick="openBuyModal('PRINCE','99₽')">Купить Prince</button>
+<button class="kit-link" onclick="openKitModal('PRINCE')">Посмотреть кит</button>
+</div>
+</article>
+
+<article class="card noob">
+<img src="images/noob.png" alt="Noob привилегия">
+<div class="card-body">
+<div class="rank" style="color:#555555; text-shadow:0 0 8px #000000; letter-spacing:1px;">NOOB</div>
+<p>Недорогая привилегия для новичков, которые хотят выделиться.</p>
+<div class="price"><span>49₽</span> <small>/ навсегда</small></div>
+<ul>
+<li>Префикс Noob</li>
+<li>Кит раз в 1.5 дня</li>
+<li>Базовые бонусы</li>
+</ul>
+<button class="buy-link noob-link" onclick="openBuyModal('NOOB','49₽')">Купить Noob</button>
+<button class="kit-link" onclick="openKitModal('NOOB')">Посмотреть кит</button>
+</div>
+</article>
+</section>
+
+<h2 class="section-title" id="services">Услуги</h2>
+
+<div class="title-carousel">
+
+<article class="card title-card">
+<div class="card-body">
+<div class="rank" style="color:#55FFFF; text-shadow:0 0 10px #55FFFF;">Разбан</div>
+<div class="price"><span>200₽</span> <small>/ разово</small></div>
+<button class="buy-link prince-link" onclick="openBuyModal('UNBAN','200₽')">Купить</button>
+</div>
+</article>
+
+<article class="card title-card">
+<div class="card-body">
+<div class="rank" style="color:#FF55FF;">Титулы</div>
+<div class="price"><span>15–99₽</span></div>
+<button class="buy-link prince-link" onclick="openTitlesPicker()">Купить</button>
+</div>
+</article>
+
+<article class="card title-card">
+<div class="card-body">
+<div class="rank" style="color:#55FF55; text-shadow:0 0 10px #55FF55;">SMP-коины</div>
+<div class="price"><span>от 15₽</span></div>
+<button class="buy-link prince-link" onclick="openBuyModal('TOKENS_CUSTOM','от 15₽')">Купить</button>
+</div>
+</article>
+
+</div>
+
+<section class="rules" id="rules">
+  <h2>📜 Свод правил</h2>
+  <pre>СВОД ПРАВИЛ:
+   1. Основные правила:
+1.1 Все обязаны соблюдать правила;
+1.2 Незнание правил не освобождает от бана;
+1.3 Главная Администрация вправе наказать Вас по причине, не указанной в настоящих правилах;
+1.4 Главная Администрация может задержать Вайп, перенести Вайп на любое время;
+1.5 Только Главная Администрация имеет право корректировать данный свод правил без уведомления игрока;
+1.6 Оскорбление, провоцирование команды проекта запрещено.
+1.7 Любой Администратор вправе вызвать игрока на проверку, без объяснений
+1.8 Администрация не может общаться с игроками без веской причины
+1.9 Администрация проекта не гарантирует продолжение работы над ним и всех его ресурсов
+   2. Правила обычного и голосового чата:
+2.1 Запрещена нецензурная лексика (маты, скрытые маты);
+2.2 Запрещено оскорбления, унижения игроков;
+2.3 Запрещен Капс/Спам/Флуд;
+2.4 Оскорбление, унижение родни и близкий игроков является поводом для бана;
+2.5 Запрещается розжиг межнациональной розни, подстрекательство на конфликт этой темы, расизм;
+2.6 Запрещено вызывать игроков на проверку читов;
+2.7 Запрещено покупать игровые ценности за реальную валюту
+   3. Игровые правила:
+3.1 Если Вы пожаловались на игрока, то Вы обязаны показать полную видеозапись и написать:
+1) Ник нарушителя
+2) Номер правила, которое нарушил игрок
+3) Свой ник
+3.1.1 Если Вы дали ложные показания, это может быть поводом для бана(не всегда);
+3.2 Нельзя пользоваться читами, кликерами, автоматизациями;
+3.2.1 Каждые чит, может быть разрешен, ТОЛЬКО для проверки Античита, с согласия 2 Главных Администраторов и под их присмотром.
+3.2.2 Каждая запрещенная модификация может быть разрешена определенной группе людей;
+3.3 Запрещено как-либо помогать, укрывать нарушителя или способствовать в его неправомерных действиях;
+3.4 Запрещено вызывание неполадок в работе сервера или попытки обрушить сервер, путем специально вызванных лагов или подобного;
+3.5 При спорных ситуациях решает все Главная Администрация;
+3.6 Запрещено использование/скрытие багов сервера;
+3.7 Запрещено иметь 3 и более аккаунтов, одновременно играющих на  сервере
+3.8 Запрещено препятствовать съемке видео Администраторов/Ютуберов Проекта
+3.9.1 Запрещен таргетинг Официальных Ютуберов/Администрации Проекта
+   4. Аккаунт:
+4.1 Запрещено иметь никнейм похожий на никнейм Администрации
+4.2 Запрещено иметь никнейм  похожий на название других проектов/чит-клиентов</pre>
+</section>
+
+</main>
+
+<div class="modal-overlay" id="buyModal">
+  <div class="buy-modal">
+    <h2 id="modalTitle">Покупка</h2>
+    <p id="modalText">Введите игровой ник, чтобы мы знали, кому выдать покупку.</p>
+    <input id="minecraftNick" type="text" placeholder="Ваш Minecraft ник" maxlength="20">
+
+    <div class="amount-row" id="tokenAmountRow">
+      <div class="amount-grid">
+        <div>
+          <span class="amount-label">Сумма в рублях (мин. 15)</span>
+          <input id="tokenRub" type="number" min="15" step="1" inputmode="numeric" placeholder="Например, 15">
+        </div>
+        <div>
+          <span class="amount-label">Кол-во SMP-коинов</span>
+          <input class="amount-readonly" id="tokenCoins" type="number" min="150" step="10" inputmode="numeric" placeholder="150" readonly>
+        </div>
+      </div>
+      <div class="amount-hint" id="tokenAmountHint">Курс: 10 SMP-коинов = 1₽</div>
+    </div>
+
+    <div class="payment-note">Оплата проходит через платёжный сервис <b>Lava</b>. После оплаты услуга выдается на указанный Minecraft-ник.</div>
+
+    <label class="agree-row">
+      <input id="agreeDocs" type="checkbox">
+      <span>Я согласен с <a href="dogovor_oferty.pdf" target="_blank">договором оферты</a> и <a href="politika_personalnyh_dannyh.pdf" target="_blank">политикой обработки персональных данных</a>.</span>
+    </label>
+
+    <div class="modal-actions">
+      <button class="modal-close" onclick="closeBuyModal()">Отмена</button>
+      <button class="modal-buy" onclick="goToPayment()">Перейти к оплате</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="kitModal">
+  <div class="buy-modal">
+    <h2 id="kitModalTitle">Кит-набор</h2>
+    <div id="kitModalContent"></div>
+    <div class="modal-actions">
+      <button class="modal-close" onclick="closeKitModal()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="titlesPickerModal">
+  <div class="buy-modal" style="width:min(900px,100%);">
+    <h2>Выберите титул</h2>
+    <div class="title-carousel">
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-darkred">ЧСВ!</div>
+          <div class="price"><span>99₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_CHSV','99₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-darkred">Батя</div>
+          <div class="price"><span>69₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BATYA','69₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-pink-bold">Mace</div>
+          <div class="price"><span>59₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MACE','59₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-green-bold">JUDE</div>
+          <div class="price"><span>59₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_JUDE','59₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-darkred">ПВП</div>
+          <div class="price"><span>49₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_PVP','49₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-yellow">Трап</div>
+          <div class="price"><span>49₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_TRAP','49₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-darkblue">БДСМ</div>
+          <div class="price"><span>35₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_BDSM','35₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-white">0iq</div>
+          <div class="price"><span>29₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_0IQ','29₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-aqua">Мяу</div>
+          <div class="price"><span>19₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_MYAU','19₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-yellow">Кис</div>
+          <div class="price"><span>19₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KIS','19₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-red">Лох</div>
+          <div class="price"><span>15₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_LOH','15₽')">Купить</button>
+        </div>
+      </article>
+      <article class="card title-card">
+        <div class="card-body">
+          <div class="rank suffix-yellow">Кек</div>
+          <div class="price"><span>15₽</span> <small>/ навсегда</small></div>
+          <button class="buy-link prince-link" onclick="openBuyModal('TITLE_KEK','15₽')">Купить</button>
+        </div>
+      </article>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-close" onclick="closeTitlesPicker()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">
+    <p>Сервер KudusSMP никак не относится к Mojang, Mojang AB, Minecraft или Microsoft.</p>
+    <p>Платёжный сервис: <b>Lava</b>.</p>
+    <p>Копирование контента сайта и материалов проекта запрещено.</p>
+    <p class="footer-links">
+      <a href="dogovor_oferty.pdf" target="_blank">Договор оферты</a>
+      <span>|</span>
+      <a href="politika_personalnyh_dannyh.pdf" target="_blank">Политика обработки персональных данных</a>
+    </p>
+  </div>
+
+  <div class="payment-center" aria-label="Платёжный сервис Lava">
+    <a class="lava-logo-link" href="https://lava.ru/" target="_blank" rel="noopener" title="Lava">
+      <img class="lava-logo" src="https://lava.ru/_next/static/media/lava-logo-full-color.cf3ad016.svg" alt="LAVA">
+    </a>
+  </div>
+
+  <div class="footer-right">
+    <p>© 2026 KudusSMP</p>
+    <p>Все права защищены</p>
+  </div>
+</footer>
+
+<script>
+
+let selectedProduct = '';
+let isSyncingTokenFields = false;
+
+const productNames = {
+  TITAN: '<span style="background:linear-gradient(90deg,#3E003E,#500050,#630063,#750075,#870087);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:950;">TITAN</span>',
+  IMPERATOR: '<span style="color:#AA0000">IMPERATOR</span>',
+  KING: '<span style="color:#FFAA00">KING</span>',
+  PRINCE: '<span style="color:#55FFFF">PRINCE</span>',
+  NOOB: '<span style="color:#555555">NOOB</span>',
+  TOKENS_CUSTOM: '<span style="color:#55FF55">SMP-коины</span>',
+  UNBAN: '<span style="color:#55FFFF">Разбан</span>',
+
+  TITLE_PVP: '<span style="color:#AA0000">ПВП</span>',
+  TITLE_BATYA: '<span style="color:#AA0000">Батя</span>',
+  TITLE_CHSV: '<span style="color:#AA0000">ЧСВ!</span>',
+  TITLE_MACE: '<span style="color:#FF55FF;font-weight:950">Mace</span>',
+  TITLE_MYAU: '<span style="color:#55FFFF">Мяу</span>',
+  TITLE_KIS: '<span style="color:#FFFF55">Кис</span>',
+  TITLE_BDSM: '<span style="color:#0000AA">БДСМ</span>',
+  TITLE_LOH: '<span style="color:#FF5555">Лох</span>',
+  TITLE_JUDE: '<span style="color:#55FF55;font-weight:950">JUDE</span>',
+  TITLE_TRAP: '<span style="color:#FFFF55">Трап</span>',
+  TITLE_KEK: '<span style="color:#FFFF55">Кек</span>',
+  TITLE_0IQ: '<span style="color:#FFFFFF">0iq</span>'
+};
+
+function openTitlesPicker() {
+  document.getElementById('titlesPickerModal').classList.add('active');
+}
+
+function closeTitlesPicker() {
+  document.getElementById('titlesPickerModal').classList.remove('active');
+}
+
+function openBuyModal(product, price) {
+  closeTitlesPicker();
+  selectedProduct = product;
+  document.getElementById('modalTitle').innerHTML = 'Купить ' + (productNames[product] || product);
+  document.getElementById('modalText').textContent = 'Стоимость: ' + price + '. Введите игровой ник для выдачи.';
+  document.getElementById('minecraftNick').value = '';
+  document.getElementById('agreeDocs').checked = false;
+
+  const amountRow = document.getElementById('tokenAmountRow');
+  if (product === 'TOKENS_CUSTOM') {
+    amountRow.classList.add('active');
+    document.getElementById('modalText').textContent = 'Введите игровой ник и сумму покупки SMP-коинов.';
+    document.getElementById('tokenRub').value = '15';
+    document.getElementById('tokenCoins').value = '150';
+  } else {
+    amountRow.classList.remove('active');
+  }
+
+  document.getElementById('buyModal').classList.add('active');
+  setTimeout(() => document.getElementById('minecraftNick').focus(), 100);
+}
+
+function syncTokensFromRub() {
+  if (isSyncingTokenFields) return;
+  isSyncingTokenFields = true;
+  const rubInput = document.getElementById('tokenRub');
+  const coinsInput = document.getElementById('tokenCoins');
+  const rub = Math.max(0, Math.floor(Number(rubInput.value || 0)));
+  coinsInput.value = String(rub * 10);
+  isSyncingTokenFields = false;
+}
+
+document.addEventListener('input', function (e) {
+  if (selectedProduct !== 'TOKENS_CUSTOM') return;
+  const t = e.target;
+  if (!t) return;
+  if (t.id === 'tokenRub') syncTokensFromRub();
+});
+
+function closeBuyModal() {
+  document.getElementById('buyModal').classList.remove('active');
+}
+
+function goToPayment() {
+  const nick = document.getElementById('minecraftNick').value.trim();
+  const agree = document.getElementById('agreeDocs').checked;
+
+  if (!nick) {
+    alert('Введите игровой ник');
+    return;
+  }
+
+  if (!agree) {
+    alert('Нужно согласиться с договором оферты и политикой обработки персональных данных');
+    return;
+  }
+
+  if (selectedProduct === 'TOKENS_CUSTOM') {
+    const rub = Math.floor(Number(document.getElementById('tokenRub').value || 0));
+    if (!rub || rub < 15) {
+      alert('Минимальная покупка — 15₽');
+      return;
+    }
+    const tokens = rub * 10;
+    window.location.href = '/api/pay?product=' + encodeURIComponent(selectedProduct)
+      + '&nick=' + encodeURIComponent(nick)
+      + '&rub=' + encodeURIComponent(String(rub))
+      + '&tokens=' + encodeURIComponent(String(tokens));
+    return;
+  }
+
+  window.location.href = '/api/pay?product=' + encodeURIComponent(selectedProduct) + '&nick=' + encodeURIComponent(nick);
+}
+
+const kits = {
+  TITAN: {
+    image: 'kits/titankit.png',
+    items: ['Кит Titan', 'Кит Imperator', 'Эксклюзивные предметы Titan']
+  },
+  IMPERATOR: {
+    image: 'kits/imperatorkit.png',
+    items: ['Кит King раз в 5 дней', 'Кит Imperator раз в неделю', 'Уникальные предметы']
+  },
+  KING: {
+    image: 'kits/kingkit.png',
+    items: ['Кит раз в 5 дней', 'Увеличенный приват', 'Эксклюзивные возможности']
+  },
+  PRINCE: {
+    image: 'kits/princekit.png',
+    items: ['Кит раз в 3 дня', 'Полезные команды', 'Увеличенный приват']
+  },
+  NOOB: {
+    image: 'kits/noobkit.png',
+    items: ['Кит раз в 1.5 дня', 'Базовые бонусы', 'Начальные возможности']
+  }
+};
+
+function openKitModal(rank) {
+  const kit = kits[rank];
+  let content = '<img class="kit-image" src="' + kit.image + '" alt="Кит ' + rank + '">';
+  content += '<div class="kit-list">' + kit.items.map(item => '• ' + item).join('<br>') + '</div>';
+  document.getElementById('kitModalTitle').textContent = 'Кит-набор: ' + rank;
+  document.getElementById('kitModalContent').innerHTML = content;
+  document.getElementById('kitModal').classList.add('active');
+}
+
+function closeKitModal() {
+  document.getElementById('kitModal').classList.remove('active');
+}
+
+document.getElementById('kitModal').addEventListener('click', function(event) {
+  if (event.target === this) closeKitModal();
+});
+
+document.getElementById('titlesPickerModal').addEventListener('click', function(event) {
+  if (event.target === this) closeTitlesPicker();
+});
+
+document.getElementById('buyModal').addEventListener('click', function(event) {
+  if (event.target === this) closeBuyModal();
+});
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeBuyModal();
+    closeKitModal();
+    closeTitlesPicker();
+  }
+});
+
+</script>
+
+</body>
+</html>
