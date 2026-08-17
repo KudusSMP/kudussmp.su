@@ -907,10 +907,7 @@ li::before { content:"✓ "; color:#55FFFF; font-weight:900; }
 <script>
 
 function openSmp() {
-  const gate = document.getElementById('modeGate');
-  if (!gate) return;
-  gate.classList.add('hidden');
-  setTimeout(() => gate.remove(), 500);
+  window.location.href = 'smp.html';
 }
 
 
